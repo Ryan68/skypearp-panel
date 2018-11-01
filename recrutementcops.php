@@ -17,6 +17,7 @@ if(isset($_POST['newrct'])){
 	unset($_SESSION['rctidentifier']);
 	unset($_SESSION['rctfirstname']);
 	unset($_SESSION['rctlastname']);
+	unset($_SESSION['rctgrade']);
 	unset($_SESSION['rctjob']);
 	unset($_SESSION["status"]);
 }
@@ -39,7 +40,7 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
-        <title>SkypeaRP Panel | Recrutement</title>   
+        <title>SkypeaRP Panel | Ressource humaine</title>   
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="description" content="">
@@ -123,14 +124,18 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
                                         </div>
                                     </form>
                                     <?php } ?>
-                                    <?php if($job == 'unemployed'){ $job = 'Sans emploi'; } ?>
-                                    <?php if(isset($_SESSION['status']) AND $_SESSION['status'] = 'success'){ ?>
+                                    <?php if(isset($_SESSION['status']) AND $_SESSION['status'] == 'success'){ ?>
                                     <div class="widget-content padding" style="text-align: center;">
 										<p><font color="green">Individu recruter avec <b>succès !</b></font></p>
 										<form method="POST">
 											<button type="submit" name="newrct" class="btn btn-skypea">Nouveau recrutement</button>
 										</form>
 									</div>
+									<?php }elseif(isset($_SESSION['status']) AND $_SESSION['status'] == 'error' AND isset($_SESSION['msgerror'])){ ?>
+										<center><p><b><font color="red"><?= $_SESSION['msgerror'] ?></font></b></p></center>
+										<form method="POST" style="text-align: center;">
+											<button type="submit" name="newrct" class="btn btn-skypea">Réessayez</button>
+										</form>
 									<?php } ?>
 								</div>
 							</div>

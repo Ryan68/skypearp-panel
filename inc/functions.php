@@ -119,7 +119,8 @@ function recrutement($firstname, $lastname, $job_grade){
         $changegrade->execute(array($job_grade, $firstname, $lastname));
         $_SESSION['status'] = 'success';
     }else{
-        die('Utilisteur introuvable');
+        $_SESSION['status'] = 'error';
+        $_SESSION['msgerror'] = 'Erreur, utilisateur introuvable !';
     }
 }
 
