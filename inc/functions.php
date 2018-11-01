@@ -111,6 +111,30 @@ function search($firstname, $lastname)
             }           
         }
 
+function recrutement($firstname, $lastname, $job_grade){   
+    if(userExist($firstname, $lastname)){
+        $changejob = bdd()->prepare('UPDATE users SET job = ? WHERE firstname = ? AND lastname = ?');
+        $changejob->execute(array($_SESSION['job'], $firstname, $lastname));
+        $changegrade = bdd()->prepare('UPDATE users SET job_grade = ? WHERE firstname = ? AND lastname = ?');
+        $changegrade->execute(array($job_grade, $firstname, $lastname));
+        $_SESSION['status'] = 'success';
+    }else{
+        die('Utilisteur introuvable');
+    }
+}
+
+function userExist($firstname, $lastname){
+    $user = bdd()->prepare('SELECT * FROM users WHERE firstname = ? AND lastname = ?');
+    $user->execute(array($firstname, $lastname));
+    $userExist = $user->fetch();
+    if(!empty($userExist['identifier'])){
+        return true;
+    }else{
+        return false;
+    }
+    
+}
+
 function newsearch() {
     unset($_SESSION['searchidentifier']);
     unset($_SESSION['searchlastname']);

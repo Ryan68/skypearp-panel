@@ -7,26 +7,25 @@ if(!$_SESSION['logged']){
 }
 
 if(isset($_POST['recrutement'])){
-	search($_POST['rctfirstname'], $_POST['rctlastname']);
+	$firstname = htmlspecialchars($_POST['rctfirstname']);
+	$lastname = htmlspecialchars($_POST['rctlastname']);
+	$job_grade = htmlspecialchars($_POST['rctgrade']);
+	recrutement($firstname, $lastname, $job_grade);
 }
 
 if(isset($_POST['newrct'])){
-	newsearch();
+	unset($_SESSION['rctidentifier']);
+	unset($_SESSION['rctfirstname']);
+	unset($_SESSION['rctlastname']);
+	unset($_SESSION['rctjob']);
+	unset($_SESSION["status"]);
 }
 
-$identifier = isset($_SESSION['searchidentifier']) ? $_SESSION['searchidentifier'] : NULL;
-$firstname = isset($_SESSION['searchfirstname']) ? $_SESSION['searchfirstname'] : NULL;
-$lastname = isset($_SESSION['searchlastname']) ? $_SESSION['searchlastname'] : NULL;
+$identifier = isset($_SESSION['rctidentifier']) ? $_SESSION['rctidentifier'] : NULL;
+$firstname = isset($_SESSION['rctfirstname']) ? $_SESSION['rctfirstname'] : NULL;
+$lastname = isset($_SESSION['rctlastname']) ? $_SESSION['rctlastname'] : NULL;
 $status = isset($_SESSION['status']) ? $_SESSION['status'] : NULL;
-$job = isset($_SESSION['searchjob']) ? $_SESSION['searchjob'] : NULL;
-$dob = isset($_SESSION['searchdob']) ? $_SESSION['searchdob'] : NULL;
-$sex = isset($_SESSION['searchsex']) ? $_SESSION['searchsex'] : NULL;
-$height = isset($_SESSION['searchheight']) ? $_SESSION['searchheight'] : NULL;
-
-$dmv = isset($_SESSION['searchdmv']) ? $_SESSION['searchdmv'] : NULL;
-$drive = isset($_SESSION['searchdrive']) ? $_SESSION['searchdrive'] : NULL;
-$drive_truck = isset($_SESSION['searchdrive_truck']) ? $_SESSION['searchdrive_truck'] : NULL;
-$weapon = isset($_SESSION['searchweapon']) ? $_SESSION['searchweapon'] : NULL;
+$job = isset($_SESSION['rctjob']) ? $_SESSION['rctjob'] : NULL;
 
 $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 
@@ -40,7 +39,7 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
-        <title>SkypeaRP Panel | Accueil</title>   
+        <title>SkypeaRP Panel | Recrutement</title>   
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="description" content="">
@@ -101,21 +100,25 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 		            	<div class="container-fluid">
 				            <div class="widget">
 				            	<div class="widget-header">
-									<h2><strong>Police :</strong></h2>
+									<h2><strong>Ressource Humaine :</strong></h2>
 								</div>
 								<div class="widget-content padding">
 									<?php if(!isset($_SESSION['status'])){ ?>
 									<form method="POST">
                                     <p><center><h3><font color='black'>Individu à recruter :</font></h3></center></p>
                                         <div class="form-group login-input">
-                                        <input type="text" class="form-control text-input" name="rctfirstname" placeholder="Prénom" style="text-align: center;">
+                                        <input type="text" class="form-control text-input" name="rctfirstname" placeholder="Prénom" style="text-align: center;" />
                                         </div>
                                         <div class="form-group login-input">
-                                        <input type="text" class="form-control text-input" name="rctlastname" placeholder="Nom" style="text-align: center;">
+                                        <input type="text" class="form-control text-input" name="rctlastname" placeholder="Nom" style="text-align: center;" />
+                                        </div>
+										<div class="form-group login-input" style="text-align: center;">
+                                        <!-- <input type="text" class="form-control text-input" name="rctgrade" placeholder="Grade 0-5" style="text-align: center;" /> -->
+										Grade : <input id="max" type="number" name="rctgrade" style="text-align: center;" value="0" min="0" max="5"/>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-12">
-                                            <button type="submit" name="recrutement" class="btn btn-skypea btn-block">Rechercher</button>
+                                            <button type="submit" name="recrutement" class="btn btn-skypea btn-block">Recruter</button>
                                             </div>
                                         </div>
                                     </form>
@@ -123,18 +126,9 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
                                     <?php if($job == 'unemployed'){ $job = 'Sans emploi'; } ?>
                                     <?php if(isset($_SESSION['status']) AND $_SESSION['status'] = 'success'){ ?>
                                     <div class="widget-content padding" style="text-align: center;">
-										<p>Nom : <b><?= $lastname ?></b></p>
-										<p>Prénom : <b><?= $firstname ?></b></p>
-										<p>Sexe : <b><?php if($sex == 'h'){ echo 'Homme'; }elseif($sex == 'f'){ echo 'Femme'; }else{ echo 'Inconnu'; } ?></b></p>
-										<p>Taille : <b><?= $height ?>cm</b></p>
-										<p>Date de naissance : <b><?= $dob ?></b></p>
-										<p>Job : <b><?= $job ?></b></p>
-										<p>Code de la route : <b><?php if($dmv == 'dmv'){ echo '<font color="green">Valide</font>'; }else{ echo '<font color="red">Invalide</font>'; } ?></b></p>
-										<p>Permis de conduire : <b><?php if($drive == 'drive'){ echo '<font color="green">Valide</font>'; }else{ echo '<font color="red">Invalide</font>'; } ?></b></p>
-										<p>Permis poid lourd : <b><?php if($drive_truck == 'drive_truck'){ echo '<font color="green">Valide</font>'; }else{ echo '<font color="red">Invalide</font>'; } ?></b></p>
-										<p>Permis de port d'arme : <b><?php if($weapon == 'weapon'){ echo '<font color="green">Valide</font>'; }else{ echo '<font color="red">Invalide</font>'; } ?></b></p>
+										<p><font color="green">Individu recruter avec <b>succès !</b></font></p>
 										<form method="POST">
-											<button type="submit" name="newrct" class="btn btn-skypea">Nouvelle recherche</button>
+											<button type="submit" name="newrct" class="btn btn-skypea">Nouveau recrutement</button>
 										</form>
 									</div>
 									<?php } ?>
