@@ -6,11 +6,11 @@ if(!$_SESSION['logged']){
     exit;
 }
 
-if(isset($_POST['submit'])){
-	search($_POST['needsearchfirstname'], $_POST['needsearchlastname']);
+if(isset($_POST['recrutement'])){
+	search($_POST['rctfirstname'], $_POST['rctlastname']);
 }
 
-if(isset($_POST['newsearch'])){
+if(isset($_POST['newrct'])){
 	newsearch();
 }
 
@@ -106,17 +106,16 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 								<div class="widget-content padding">
 									<?php if(!isset($_SESSION['status'])){ ?>
 									<form method="POST">
-                                    <p><center><h3><font color='black'>Individu à rechercher :</font></h3></center></p>
+                                    <p><center><h3><font color='black'>Individu à recruter :</font></h3></center></p>
                                         <div class="form-group login-input">
-                                        <input type="text" class="form-control text-input" name="needsearchfirstname" placeholder="Prénom" style="text-align: center;">
+                                        <input type="text" class="form-control text-input" name="rctfirstname" placeholder="Prénom" style="text-align: center;">
                                         </div>
                                         <div class="form-group login-input">
-                                        <input type="text" class="form-control text-input" name="needsearchlastname" placeholder="Nom" style="text-align: center;">
+                                        <input type="text" class="form-control text-input" name="rctlastname" placeholder="Nom" style="text-align: center;">
                                         </div>
-                                        <input hidden type="text" name="action" value="search"/>
                                         <div class="row">
                                             <div class="col-sm-12">
-                                            <button type="submit" name="submit" class="btn btn-skypea btn-block">Rechercher</button>
+                                            <button type="submit" name="recrutement" class="btn btn-skypea btn-block">Rechercher</button>
                                             </div>
                                         </div>
                                     </form>
@@ -135,7 +134,7 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 										<p>Permis poid lourd : <b><?php if($drive_truck == 'drive_truck'){ echo '<font color="green">Valide</font>'; }else{ echo '<font color="red">Invalide</font>'; } ?></b></p>
 										<p>Permis de port d'arme : <b><?php if($weapon == 'weapon'){ echo '<font color="green">Valide</font>'; }else{ echo '<font color="red">Invalide</font>'; } ?></b></p>
 										<form method="POST">
-											<button type="submit" name="newsearch" class="btn btn-skypea">Nouvelle recherche</button>
+											<button type="submit" name="newrct" class="btn btn-skypea">Nouvelle recherche</button>
 										</form>
 									</div>
 									<?php } ?>
