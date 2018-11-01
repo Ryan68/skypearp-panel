@@ -6,6 +6,16 @@ if(!$_SESSION['logged']){
     exit;
 }
 
+if($_SESSION['job'] == 'police'){
+	if($_SESSION['job_grade'] != '5'){
+		header("Location: ".$_SERVER['HTTP_REFERER']);
+   		exit;
+	}
+}else{
+	header("Location: ".$_SERVER['HTTP_REFERER']);
+   	exit;
+}
+
 if(isset($_POST['recrutement'])){
 	$firstname = htmlspecialchars($_POST['rctfirstname']);
 	$lastname = htmlspecialchars($_POST['rctlastname']);
@@ -29,11 +39,6 @@ $status = isset($_SESSION['status']) ? $_SESSION['status'] : NULL;
 $job = isset($_SESSION['rctjob']) ? $_SESSION['rctjob'] : NULL;
 
 $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
-
-// if($_SESSION['job'] != 'police'){
-//     header("Location: ".$_SERVER['HTTP_REFERER']);
-//     exit;
-// }
 
 ?>
 <!DOCTYPE html>
