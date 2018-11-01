@@ -158,10 +158,58 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class='has_sub'>
+                                <a href='javascript:void(0);'>
+                                    <span>Ambulance</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span>
+                                </a>
+                                <ul>
+                                    <li class='has_sub'>
+                                        <a href='javascript:void(0);'>
+                                            <span>Gestion entreprise</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span>
+                                        </a>
+                                        <ul>
+                                            <li><a href='recrutementems.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/recrutementems.php'){ echo "class='active'"; } ?>><span>Recrutement</span></a></li>
+                                        </ul>
+                                        <!-- <li><a href='cops.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/cops.php'){ echo "class='active'"; } ?> ><span>Rechercher individu</span></a></li> -->
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class='has_sub'>
+                                <a href='javascript:void(0);'>
+                                    <span>Mecano</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span>
+                                </a>
+                                <ul>
+                                    <li class='has_sub'>
+                                        <a href='javascript:void(0);'>
+                                            <span>Gestion entreprise</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span>
+                                        </a>
+                                        <ul>
+                                            <li><a href='recrutementmecano.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/recrutementmecano.php'){ echo "class='active'"; } ?>><span>Recrutement</span></a></li>
+                                        </ul>
+                                        <!-- <li><a href='cops.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/cops.php'){ echo "class='active'"; } ?> ><span>Rechercher individu</span></a></li> -->
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class='has_sub'>
+                                <a href='javascript:void(0);'>
+                                    <span>Taxi</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span>
+                                </a>
+                                <ul>
+                                    <li class='has_sub'>
+                                        <a href='javascript:void(0);'>
+                                            <span>Gestion entreprise</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span>
+                                        </a>
+                                        <ul>
+                                            <li><a href='recrutementtaxi.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/recrutementtaxi.php'){ echo "class='active'"; } ?>><span>Recrutement</span></a></li>
+                                        </ul>
+                                        <!-- <li><a href='cops.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/cops.php'){ echo "class='active'"; } ?> ><span>Rechercher individu</span></a></li> -->
+                                    </li>
+                                </ul>
+                            </li>
 
-                            <li><a href='ems.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/ems.php'){ echo "class='active'"; } ?> ><span>Ambulance</span></a></li>
+                            <!-- <li><a href='ems.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/ems.php'){ echo "class='active'"; } ?> ><span>Ambulance</span></a></li>
                             <li><a href='meca.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/meca.php'){ echo "class='active'"; } ?> ><span>Mecano</span></a></li>
-                            <li><a href='taxi.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/taxi.php'){ echo "class='active'"; } ?> ><span>Taxi</span></a></li>
+                            <li><a href='taxi.php' <?php if($_SERVER['PHP_SELF'] == '/dev/skypearp/taxi.php'){ echo "class='active'"; } ?> ><span>Taxi</span></a></li> -->
                         </ul>
                     </li>
                     <li class='has_sub'>
