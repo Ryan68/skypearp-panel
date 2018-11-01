@@ -23,6 +23,22 @@ if(isset($_POST['submit'])){
 
 }
 
+if(isset($_POST['profilmsgsubmit'])){
+
+    if(!empty($_POST['profilmessage'])){
+
+        $username = htmlspecialchars($_SESSION['firstname'].' '.$_SESSION['lastname']);
+        $message = htmlspecialchars($_POST['profilmessage']);
+        $senderidentifier = htmlspecialchars($_SESSION['identifier']);
+        $insertmsg = bdd()->prepare('INSERT INTO wall (username, content, send_date, id_profil) VALUES (?, ?, Now(), ?)');
+        $insertmsg->execute(array($username, $message, $_GET['id']));
+
+    }else{
+        echo 'Veuillez insérez un message !';
+    }
+
+}
+
 if(isset($_GET['id']) AND !empty($_GET['id'])){
 
     $id = intval($_GET['id']);
@@ -33,6 +49,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
     if(empty($result)){
         die('Utilisateur introuvable');
     }else{
+        $profilid = $result['id'];
         $profilfirstname = $result['firstname'];
         $profillastname = $result['lastname'];
         if(!empty($result['avatar'])){
@@ -45,7 +62,6 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
 
 
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -263,7 +279,8 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                             <br><br>
                                             <ul>
                                                 <?php
-                                                $allmsg = bdd()->query('SELECT * FROM chat ORDER by id DESC');
+                                                $allmsg = bdd()->prepare('SELECT * FROM wall WHERE id_profil = ? ORDER by id DESC');
+                                                $allmsg->execute(array($_SESSION['id']));
                                                 while($msg = $allmsg->fetch()){ ?>
                                                     <?php
                                                         $datesql = $msg['send_date'];
@@ -306,7 +323,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                         </div>
                                                         <h4><?= $msg['username'] ?> : </h4>
                                                         <p>
-                                                        <?= $msg['message'] ?>
+                                                        <?= $msg['content'] ?>
                                                         </p>
                                                     </li>
 
@@ -526,38 +543,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                             <h4><?php echo $profilfirstname.' <b>'. $profillastname.'</b>'; ?></h4>
                             
                             <h5><?= $_SESSION['job'] ?></h5>
-                            <ul class="list-group">
-                              <li class="list-group-item">
-                                <span class="badge"><?= number_format($_SESSION['money']) ?> <font color="lightgreen">$</font></span>
-                                Liquide
-                              </li>
-                              <li class="list-group-item">
-                                <span class="badge"><?= number_format($_SESSION['bank']) ?> <font color="lightgreen">$</font></span>
-                                Banque
-                              </li>
-                              <li class="list-group-item">
-                                <span class="badge"><?= number_format($_SESSION['blackmoney']) ?> <font color="lightgreen">$</font></span>
-                                Argent sale
-                              </li>
-                            </ul>
-                                
-                                <!-- User button -->
-                            <div class="user-button">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <form method="POST" action="testprofil.php#mymessage">
-                                            <button type="submit" class="btn btn-primary btn-sm btn-block"><i class="fa fa-envelope"></i> Envoyez Message</button>
-                                        </form>
-                                    </div>
-                                    <?php if($_SESSION['logged']){ ?>
-                                    <div class="col-lg-6">
-                                        <form method="POST" action="editprofil.php">
-                                            <button type="submit" class="btn btn-default btn-sm btn-block"><i class="fa fa-user"></i> Editer profil</button>
-                                        </form>
-                                    </div>
-                                    <?php } ?>
-                                </div>
-                            </div><!-- End div .user-button -->
+                            
                         </div><!-- End div .box-info -->
                         <!-- Begin user profile -->
                     </div><!-- End div .col-sm-4 -->
@@ -585,20 +571,21 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                         <div class="the-timeline">
                                             <h2>Ajouter un message sur le mur de <?= $profilfirstname ?></h2>
                                             <form role="form" class="post-to-timeline" method="POST">
-                                                <textarea class="form-control" style="height: 70px;" name="message" placeholder="Votre message..."></textarea>
+                                                <textarea class="form-control" style="height: 70px;" name="profilmessage" placeholder="Votre message..."></textarea>
                                                 <div class="row">
                                                 <div class="col-sm-6">
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-camera"></i></a>
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-video-camera"></i></a>
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-map-marker"></i></a>
                                                 </div>
-                                                <div class="col-sm-6 text-right"><button type="submit" name="submit" class="btn btn-primary">Envoyez</button></div>
+                                                <div class="col-sm-6 text-right"><button type="submit" name="profilmsgsubmit" class="btn btn-primary">Envoyez</button></div>
                                                 </div>
                                             </form>
                                             <br><br>
                                             <ul>
                                                 <?php
-                                                $allmsg = bdd()->query('SELECT * FROM chat ORDER by id DESC');
+                                                $allmsg = bdd()->prepare('SELECT * FROM wall WHERE id_profil = ? ORDER by id DESC');
+                                                $allmsg->execute(array($_GET['id']));
                                                 while($msg = $allmsg->fetch()){ ?>
                                                     <?php
                                                         $datesql      =  $msg['send_date'];
@@ -641,7 +628,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                         </div>
                                                         <h4><?= $msg['username'] ?> : </h4>
                                                         <p>
-                                                        <?= $msg['message'] ?>
+                                                        <?= $msg['content'] ?>
                                                         </p>
                                                     </li>
 

@@ -39,7 +39,7 @@ function bdd(){
     try
     {
         // On se connecte à MySQL
-        $bdd = new PDO('mysql:host=localhost;dbname=essentialmode', 'root', '');
+        $bdd = new PDO('mysql:host=localhost;dbname=essentialmode;charset=UTF8', 'root', '');
     }
     catch(Exception $e)
     {
@@ -54,7 +54,7 @@ function bddarticles(){
     try
     {
         // On se connecte à MySQL
-        $bdd = new PDO('mysql:host=localhost;dbname=espace_commentaires', 'root', '');
+        $bdd = new PDO('mysql:host=localhost;dbname=espace_commentaires;charset=UTF8', 'root', '');
     }
     catch(Exception $e)
     {
