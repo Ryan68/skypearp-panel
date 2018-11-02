@@ -19,11 +19,10 @@ if(isset($_POST['connexion'])){
 			}
         } else {
             $errors = $resp->getErrorCodes();
-            var_dump('Captcha invalide');
-            var_dump($errors);
+            die('Captcha invalide');
         }
     }else{
-        var_dump('Captcha non rempli');
+        die('Captcha non rempli');
     }
 }
 
