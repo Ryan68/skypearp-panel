@@ -41,6 +41,22 @@ if(isset($_POST['profilmsgsubmit'])){
 
 }
 
+if(isset($_POST['submitchat'])){
+
+    if(!empty($_POST['chatmsg'])){
+
+        $username = htmlspecialchars($_SESSION['firstname'].' '.$_SESSION['lastname']);
+        $message = htmlspecialchars($_POST['chatmsg']);
+        $senderidentifier = htmlspecialchars($_SESSION['identifier']);
+        $insertmsg = bdd()->prepare('INSERT INTO chat (username, content, send_date, sender_identifier) VALUES (?, ?, Now(), ?)');
+        $insertmsg->execute(array($username, $message, $senderidentifier));
+
+    }else{
+        echo 'Veuillez insérez un message !';
+    }
+
+}
+
 if(isset($_GET['id']) AND !empty($_GET['id'])){
 
     $id = intval($_GET['id']);
@@ -120,6 +136,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
     <link rel="apple-touch-icon" sizes="120x120" href="assets/img/apple-touch-icon-120x120.png" />
     <link rel="apple-touch-icon" sizes="144x144" href="assets/img/apple-touch-icon-144x144.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="assets/img/apple-touch-icon-152x152.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body class="fixed-left">
@@ -407,20 +424,22 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                     <div class="container-fluid">
                                             <h2>Chat :</h2>
                                             <form role="form" class="post-to-timeline" method="POST">
-                                                <textarea class="form-control" style="height: 70px;" name="message" placeholder="Votre message..."></textarea>
+                                                <textarea class="form-control" style="height: 70px;" name="chatmsg" placeholder="Votre message..." required></textarea>
                                                 <div class="row">
                                                 <div class="col-sm-6">
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-camera"></i></a>
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-video-camera"></i></a>
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-map-marker"></i></a>
                                                 </div>
-                                                <div class="col-sm-6 text-right"><button type="submit" name="submit" class="btn btn-primary">Envoyez</button></div>
+                                                <div class="col-sm-6 text-right"><button type="submit" name="submitchat" class="btn btn-primary">Envoyez</button></div>
                                                 </div>
                                             </form>
                                             <br><br>
                                             </div>
                                         <ul class="media-list">               
                                         <!-- CHAT START HERE -->
+                                        <div id='message'>
+                                            
                                         <?php
                                             $allmsg = bdd()->query('SELECT * FROM chat ORDER by id DESC');
                                             while($msg = $allmsg->fetch()){ ?>
@@ -431,31 +450,30 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                 $getavatar->execute(array($sident));
                                                 $result = $getavatar->fetch();
                                                 if(empty($result['firstname'])){
-                                                    //die('utilisateur introuvable');
                                                     $avatar = 'img_avatar.png';
                                                 }else{
                                                     if(empty($result['avatar'])){
                                                         $avatar = 'img_avatar.png';
                                                     }else{
                                                         $avatar = $result['avatar'];
-                                                    }
-                                                    
+                                                    }                                           
                                                 }
                                                 $ID = $result['id'];
-                                                ?>
-
+                                            ?>
                                             <li class="media">
                                                 <a class="pull-left" href="assets/img/avatar/<?= $avatar ?>">
-                                                <img class="media-object" src="assets/img/avatar/<?= $avatar ?>" alt="Avatar">
+                                                    <img class="media-object" src="assets/img/avatar/<?= $avatar ?>" alt="Avatar">
                                                 </a>
                                                 <div class="media-body">
-                                                <h4 class="media-heading"><a href="profil.php?id=<?= $ID ?>"><?= $msg['username'] ?></a> <small><?= $msg['send_date'] ?></small></h4>
-                                                <p><?= $msg['message'] ?></p>
+                                                    <h4 class="media-heading"><a href="profil.php?id=<?= $ID ?>"><?= $msg['username'] ?></a> <small><?= $msg['send_date'] ?></small></h4>
+                                                    <p><?= $msg['content'] ?></p>
                                                 </div>
                                             </li>
 
 
-                                            <?php } ?>
+                                        <?php } ?>
+
+                                        </div>
                                           <!-- CHAT END HERE -->
                                         </ul>
                                     </div><!-- End div .scroll-user-widget -->
@@ -714,20 +732,22 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                     <div class="container-fluid">
                                             <h2>Chat :</h2>
                                             <form role="form" class="post-to-timeline" method="POST">
-                                                <textarea class="form-control" style="height: 70px;" name="message" placeholder="Votre message..."></textarea>
+                                                <textarea class="form-control" style="height: 70px;" name="chatmessage" placeholder="Votre message..."></textarea>
                                                 <div class="row">
                                                 <div class="col-sm-6">
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-camera"></i></a>
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-video-camera"></i></a>
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-map-marker"></i></a>
                                                 </div>
-                                                <div class="col-sm-6 text-right"><button type="submit" name="submit" class="btn btn-primary">Envoyez</button></div>
+                                                <div class="col-sm-6 text-right"><button type="submit" name="submitchat" class="btn btn-primary">Envoyez</button></div>
                                                 </div>
                                             </form>
                                             <br><br>
                                             </div>
                                         <ul class="media-list">               
                                         <!-- CHAT START HERE -->
+                                        <div id='message'>
+                                            
                                         <?php
                                             $allmsg = bdd()->query('SELECT * FROM chat ORDER by id DESC');
                                             while($msg = $allmsg->fetch()){ ?>
@@ -738,31 +758,30 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                 $getavatar->execute(array($sident));
                                                 $result = $getavatar->fetch();
                                                 if(empty($result['firstname'])){
-                                                    //die('utilisateur introuvable');
                                                     $avatar = 'img_avatar.png';
                                                 }else{
                                                     if(empty($result['avatar'])){
                                                         $avatar = 'img_avatar.png';
                                                     }else{
                                                         $avatar = $result['avatar'];
-                                                    }
-                                                    
+                                                    }                                           
                                                 }
                                                 $ID = $result['id'];
-                                                ?>
-
+                                            ?>
                                             <li class="media">
                                                 <a class="pull-left" href="assets/img/avatar/<?= $avatar ?>">
-                                                <img class="media-object" src="assets/img/avatar/<?= $avatar ?>" alt="Avatar">
+                                                    <img class="media-object" src="assets/img/avatar/<?= $avatar ?>" alt="Avatar">
                                                 </a>
                                                 <div class="media-body">
-                                                <h4 class="media-heading"><a href="profil.php?id=<?= $ID ?>"><?= $msg['username'] ?></a> <small><?= $msg['send_date'] ?></small></h4>
-                                                <p><?= $msg['message'] ?></p>
+                                                    <h4 class="media-heading"><a href="profil.php?id=<?= $ID ?>"><?= $msg['username'] ?></a> <small><?= $msg['send_date'] ?></small></h4>
+                                                    <p><?= $msg['content'] ?></p>
                                                 </div>
                                             </li>
 
 
-                                            <?php } ?>
+                                        <?php } ?>
+
+                                        </div>
                                           <!-- CHAT END HERE -->
                                         </ul>
                                     </div><!-- End div .scroll-user-widget -->
@@ -836,5 +855,11 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
 <script src="assets/js/apps/todo.js"></script>
 <script src="assets/js/apps/notes.js"></script>
 <script src="assets/js/pages/index.js"></script>
+<script>
+    setInterval('load_messages()', 3000);
+    function load_messages() {
+        $('#message').load('chat.php');
+    }
+</script>
 </body>
 </html>

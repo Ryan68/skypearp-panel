@@ -50,6 +50,13 @@ function bdd(){
     return $bdd;
 }
 
+function dd($variable){
+    echo '<pre>';
+    var_dump($variable);
+    echo '</pre>';
+    die();
+}
+
 function bddarticles(){
     try
     {

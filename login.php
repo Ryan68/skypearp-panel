@@ -1,15 +1,29 @@
 <?php
 include('inc/functions.php');
+require_once 'autoload.php';
+$secret = '6LezXU0UAAAAAMtX859-rngB5tkBHUWm0LuTfDay';
 
 if(isset($_POST['connexion'])){
-    Connexion($_POST['firstname'], $_POST['lastname'], $_POST['password']);
-    if(isset($_SESSION['logged'])){
-        if($_SESSION['logged']){
-            //$_SESSION['success'] = true;
-            header('Refresh: 0; URL = index.php');
-        }else{
-            //$_SESSION['success'] = false;
+	if(isset($_POST['g-recaptcha-response'])){
+        $recaptcha = new \ReCaptcha\ReCaptcha($secret);
+        $resp = $recaptcha->verify($_POST['g-recaptcha-response']);
+        if ($resp->isSuccess()) {
+            Connexion($_POST['firstname'], $_POST['lastname'], $_POST['password']);
+			if(isset($_SESSION['logged'])){
+				if($_SESSION['logged']){
+					//$_SESSION['success'] = true;
+					header('Location: index.php');
+				}else{
+					//$_SESSION['success'] = false;
+				}
+			}
+        } else {
+            $errors = $resp->getErrorCodes();
+            var_dump('Captcha invalide');
+            var_dump($errors);
         }
+    }else{
+        var_dump('Captcha non rempli');
     }
 }
 
@@ -64,6 +78,7 @@ if(isset($_POST['connexion'])){
         <link rel="apple-touch-icon" sizes="120x120" href="assets/img/apple-touch-icon-120x120.png" />
         <link rel="apple-touch-icon" sizes="144x144" href="assets/img/apple-touch-icon-144x144.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="assets/img/apple-touch-icon-152x152.png" />
+		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
     <body class="fixed-left login-page">		
 	<!-- Begin page -->
@@ -88,6 +103,7 @@ if(isset($_POST['connexion'])){
 						<i class="fa fa-key overlay"></i>
 						<input id="psw" type="password" class="form-control text-input" name="password" placeholder="Mot de passe" required>
 						</div>
+						<div class="g-recaptcha" data-sitekey="6LezXU0UAAAAADImLsERtn26IXe2e115FO2xE_iY"></div>
 						<div class="row">
 							<div class="col-sm-12" >
 								<button type="submit" name="connexion" class="btn btn-skypea btn-block">Connexion</button>

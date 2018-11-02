@@ -133,17 +133,109 @@ if($perm <= 0){
                                                 <?php }else{ ?>
                                                     <p>Dernière connexion au panel : <strong>Jamais</strong></p>
                                                 <?php } ?>
-                                                <a href="supprimeruser.php?id=<?= $a['id'] ?>"><b>Supprimer l'utilisateur</b></a>
+                                                <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyCash<?= $ID ?>"><img src="assets/img/argent/cash.png"> Modifier <img src="assets/img/argent/cash.png"></button></p>
+                                                <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyBank<?= $ID ?>"><img src="assets/img/argent/bank.png"> Modifier <img src="assets/img/argent/bank.png"></button></p>
+                                                <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyBlack<?= $ID ?>"><img src="assets/img/argent/black_money.png"> Modifier <img src="assets/img/argent/black_money.png"></button></p>
+                                                <form action="supprimeruser.php?id=<?= $a['id'] ?>">
+                                                    <p><button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#moneyCash<?= $ID ?>" data-whatever="@getbootstrap">Supprimer utilisateur</button></p>
+                                                </form>
+                                                <!-- <p><a href="supprimeruser.php?id=<?= $a['id'] ?>"><b>Supprimer l'utilisateur</b></a></p> -->
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                             <hr>
+                            <div class="modal fade" id="moneyCash<?= $ID ?>" tabindex="-1" role="dialog" aria-labelledby="moneyCashLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="moneyCashLabel">Modifier liquide :</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="argent.php">
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Nouveau montant* :</label>
+                                            <input type="text" name="ID" value="<?= $ID ?>" hidden />
+                                            <input type="text" name="type" value="cash" hidden />
+                                            <p><input id="max" type="number" name="montant" style="text-align: center;" value="0" max="999999999" /></p>
+                                            <p><small>*Attention, cela remplace la valeur, elle ne s'ajoute pas à la valeur précedente !</small></p>
+                                            <!-- <textarea class="form-control" id="message-text"></textarea> -->
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                        <button type="submit" class="btn btn-primary" name="sendmoney">Modifier</button>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="moneyBank<?= $ID ?>" tabindex="-1" role="dialog" aria-labelledby="moneyBankLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="moneyBankLabel">Modifier compte bancaire :</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="argent.php">
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Nouveau montant* :</label>
+                                            <input type="text" name="ID" value="<?= $ID ?>" hidden />
+                                            <input type="text" name="type" value="bank" hidden />
+                                            <p><input id="max" type="number" name="montant" style="text-align: center;" value="0" max="999999999" /></p>
+                                            <p><small>*Attention, cela remplace la valeur, elle ne s'ajoute pas à la valeur précedente !</small></p>
+                                            <!-- <textarea class="form-control" id="message-text"></textarea> -->
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                        <button type="submit" class="btn btn-primary" name="sendmoney">Modifier</button>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="moneyBlack<?= $ID ?>" tabindex="-1" role="dialog" aria-labelledby="moneyBlackLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="moneyBlackLabel">Modifier argent sale :</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="argent.php">
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Nouveau montant* :</label>
+                                            <input type="text" name="ID" value="<?= $ID ?>" hidden />
+                                            <input type="text" name="type" value="black" hidden />
+                                            <p><input id="max" type="number" name="montant" style="text-align: center;" value="0" max="999999999" /></p>
+                                            <p><small>*Attention, cela remplace la valeur, elle ne s'ajoute pas à la valeur précedente !</small></p>
+                                            <!-- <textarea class="form-control" id="message-text"></textarea> -->
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                        <button type="submit" class="btn btn-primary" name="sendmoney">Modifier</button>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                         </center>
                     <?php } ?>
                     <!-- USERS END HERE-->
-
+                    
                     <!-- CONTENT END HERE-->
 				</div>
 
