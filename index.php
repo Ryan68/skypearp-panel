@@ -133,8 +133,10 @@ if(!$_SESSION['logged']){
 									<i class="icon-globe-inv"></i>
 								</div>
 								<div class="text-box">
-									<p class="maindata">TOTAL <b>VISITORS</b></p>
-									<h2><span class="animate-number" data-value="25153" data-duration="3000">0</span></h2>
+									<!-- <p class="maindata">TOTAL <b>VISITORS</b></p> -->
+									<?php $user = CountUsers(); ?>
+									<p class="maindata">TOTAL <b>JOUEURS</b></p>
+									<h2><span class="animate-number" data-value="<?= $user ?>" data-duration="2000">0</span></h2>
 									<div class="clearfix"></div>
 								</div>
 							</div>
@@ -156,8 +158,9 @@ if(!$_SESSION['logged']){
 									<i class="icon-bag"></i>
 								</div>
 								<div class="text-box">
-									<p class="maindata">TOTAL <b>SALES</b></p>
-									<h2><span class="animate-number" data-value="6399" data-duration="3000">0</span></h2>
+									<?php $veh = CountVehs(); ?>
+									<p class="maindata">TOTAL VEHICULE <b>ACHETÉ</b></p>
+									<h2><span class="animate-number" data-value="<?= $veh ?>" data-duration="2000">0</span></h2>
 
 									<div class="clearfix"></div>
 								</div>
@@ -180,8 +183,9 @@ if(!$_SESSION['logged']){
 									<i class="fa fa-dollar"></i>
 								</div>
 								<div class="text-box">
-									<p class="maindata">OVERALL <b>INCOME</b></p>
-									<h2>$<span class="animate-number" data-value="70389" data-duration="3000">0</span></h2>
+									<?php $properties = CountProperties(); ?>
+									<p class="maindata">TOTAL PROPRIÉTÉS <b>ACHETÉ</b></p>
+									<h2><span class="animate-number" data-value="<?= $properties ?>" data-duration="2000">0</span></h2>
 									<div class="clearfix"></div>
 								</div>
 							</div>
@@ -203,8 +207,9 @@ if(!$_SESSION['logged']){
 									<i class="fa fa-users"></i>
 								</div>
 								<div class="text-box">
-									<p class="maindata">TOTAL <b>USERS</b></p>
-									<h2><span class="animate-number" data-value="18648" data-duration="3000">0</span></h2>
+									<?php $licenses = CountLicenses(); ?>
+									<p class="maindata">TOTAL PERMIS <b>OBTENU</b></p>
+									<h2><span class="animate-number" data-value="<?= $licenses ?>" data-duration="2000">0</span></h2>
 									<div class="clearfix"></div>
 								</div>
 							</div>

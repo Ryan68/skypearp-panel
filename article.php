@@ -101,11 +101,6 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
             <div class="content">
 				<div class="row">
                     <!-- CONTENT START HERE-->
-                    <?php
-                        function fileExists($path){
-                            return (@fopen($path,"r")==true);
-                        }
-                    ?>
                     <!-- ARTICLE START HERE-->
 		            <?php if(!empty($get_id )) { ?>
 		            	<div class="container-fluid">
@@ -144,8 +139,6 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 						</div>
 		            <?php } ?>
 		            <!-- ARTICLE END HERE-->
-
-
                     <!-- CONTENT END HERE-->
 				</div>
 

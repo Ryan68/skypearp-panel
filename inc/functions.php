@@ -378,6 +378,30 @@ function GetLicenseDriveTruck($identifier){
 
 }
 
+function CountUsers(){
+    $count = bdd()->query('SELECT * FROM users');
+    $result = $count->rowCount();
+    return $result;  
+}
+
+function CountVehs(){
+    $count = bdd()->query('SELECT * FROM owned_vehicles');
+    $result = $count->rowCount();
+    return $result;  
+}
+
+function CountProperties(){
+    $count = bdd()->query('SELECT * FROM owned_properties');
+    $result = $count->rowCount();
+    return $result;  
+}
+
+function CountLicenses(){
+    $count = bdd()->query('SELECT * FROM user_licenses');
+    $result = $count->rowCount();
+    return $result;  
+}
+
 function Rechercher($firstname, $lastname){
     //On clear les données dans l'éventualité ou une requête avais déjà été faite !
     unset($_SESSION['suspectidentifier']);
