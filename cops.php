@@ -53,11 +53,6 @@ $weapon = isset($_SESSION['searchweapon']) ? $_SESSION['searchweapon'] : NULL;
 
 $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 
-// if($_SESSION['job'] != 'police'){
-//     header("Location: ".$_SERVER['HTTP_REFERER']);
-//     exit;
-// }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -183,7 +178,7 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 											<button type="submit" name="newsearch" class="btn btn-skypea">Nouvelle recherche</button>
 										</form>
 									</div>
-									<?php } ?>
+									<?php } unset($_SESSION['status']); ?>
 								</div>
 							</div>
 						</div>

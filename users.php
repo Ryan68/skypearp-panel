@@ -1,5 +1,5 @@
 <?php
-require_once('inc/functions.php');
+include('inc/functions.php');
 
 if(!$_SESSION['logged']){
     header("Location: login.php");
@@ -129,7 +129,7 @@ if($perm <= 0){
                                                 <p>Permis poid lourd : <strong><?php if(isset($_SESSION['admindrive_truck'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
                                                 <p>Permis de port d'arme : <strong><?php if(isset($_SESSION['adminweapon'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
                                                 <?php if($a['lastest_panel_connection'] != NULL){ ?>
-                                                <p>Dernière connexion au panel : <strong><?= $a['lastest_panel_connection'] ?></strong></p>
+                                                    <p>Dernière connexion au panel : <strong><?= $a['lastest_panel_connection'] ?></strong></p>
                                                 <?php }else{ ?>
                                                     <p>Dernière connexion au panel : <strong>Jamais</strong></p>
                                                 <?php } ?>
@@ -137,7 +137,6 @@ if($perm <= 0){
                                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyBank<?= $ID ?>"><img src="assets/img/argent/bank.png"> Modifier <img src="assets/img/argent/bank.png"></button>
                                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyBlack<?= $ID ?>"><img src="assets/img/argent/black_money.png"> Modifier <img src="assets/img/argent/black_money.png"></button></p>
                                                 <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#delete<?= $ID ?>"><i class="glyphicon glyphicon-warning-sign"></i> Supprimer utilisateur <i class="glyphicon glyphicon-warning-sign"></i></button></p>
-                                                <!-- <p><a href="supprimeruser.php?id=<?= $ID ?>"><b>Supprimer l'utilisateur</b></a></p> -->
                                             </div>
                                         </form>
                                     </div>
