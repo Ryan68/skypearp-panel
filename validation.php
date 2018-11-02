@@ -108,9 +108,9 @@ if(isset($_POST['activatenewlicense'])){
                                     <?php if(isset($_SESSION['status']) AND $_SESSION['status'] == 'success'){ ?>
                                     <div class="widget-content padding" style="text-align: center;">
 										<p><font color="green"><b>License validé avec succès !</b></font></p>
-										<p>Ancien montant : <font color="green"><b><?= $_SESSION['ancienmontant'].'$' ?></b></font></p>
-										<p>Montant ajouté : <font color="green"><b><?= $_SESSION['montantlicense'].'$' ?></b></font></p>
-										<p>Nouveau montant : <font color="green"><b><?= $_SESSION['nouveaumontant'].'$' ?></b></font></p>
+										<p>Ancien montant : <font color="green"><b><?= number_format($_SESSION['ancienmontant']).'$' ?></b></font></p>
+										<p>Montant ajouté : <font color="green"><b><?= number_format($_SESSION['montantlicense']).'$' ?></b></font></p>
+										<p>Nouveau montant : <font color="green"><b><?= number_format($_SESSION['nouveaumontant']).'$' ?></b></font></p>
 										<form method="POST">
 											<button type="submit" name="activatenewlicense" class="btn btn-skypea">Activer une nouvelle licence</button>
 										</form>
@@ -139,16 +139,6 @@ if(isset($_POST['activatenewlicense'])){
 
         </div>
 		<!-- End right content -->
-
-	</div>
-	<div id="contextMenu" class="dropdown clearfix">
-		    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
-		        <li><a tabindex="-1" href="javascript:;" data-priority="high"><i class="fa fa-circle-o text-red-1"></i> High Priority</a></li>
-		        <li><a tabindex="-1" href="javascript:;" data-priority="medium"><i class="fa fa-circle-o text-orange-3"></i> Medium Priority</a></li>
-		        <li><a tabindex="-1" href="javascript:;" data-priority="low"><i class="fa fa-circle-o text-yellow-1"></i> Low Priority</a></li>
-		        <li><a tabindex="-1" href="javascript:;" data-priority="none"><i class="fa fa-circle-o text-lightblue-1"></i> None</a></li>
-		    </ul>
-		</div>
 	<!-- End of page -->
 		<!-- the overlay modal element -->
 	<div class="md-overlay"></div>
