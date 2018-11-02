@@ -12,7 +12,7 @@ if($perm == 0){
     exit;
 }
 
-$bdd = new PDO("mysql:host=localhost;dbname=espace_commentaires;charset=utf8", "root", "");
+$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_commentaires;charset=utf8','root','');
 $mode_edition = 0;
 if(isset($_GET['edit']) AND !empty($_GET['edit'])) {
    $mode_edition = 1;
@@ -175,13 +175,6 @@ if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
             <div class="content">
 				<div class="row">
                     <!-- CONTENT START HERE-->
-
-                    <?php
-                        function fileExists($path){
-                            return (@fopen($path,"r")==true);
-                        }
-                    ?>
-
                     <div class="container-fluid">
                       <div class="widget">
                         <div class="widget-header">

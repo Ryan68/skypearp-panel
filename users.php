@@ -124,10 +124,10 @@ if($perm <= 0){
                                                 <p>Niveau de permission : <strong><?= $a['permission_level'] ?></strong></p>
                                                 <p>Santé : <strong><?php if($a['isDead'] == 0){ echo '<font color="#2ecc71">VIVANT</font>'; }else{ echo $mort.'<font color="red">MORT</font>'.$mort; } ?></strong></p>
                                                 <?php GetLicense($a['identifier']); ?>
-                                                <p>Code de la route : <strong><?php if(isset($_SESSION['admindmv']) AND !empty($_SESSION['admindmv'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
-                                                <p>Permis de conduire : <strong><?php if(isset($_SESSION['adminddrive']) AND !empty($_SESSION['adminddrive'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
-                                                <p>Permis poid lourd : <strong><?php if(isset($_SESSION['admindrive_truck']) AND !empty($_SESSION['admindrive_truck'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
-                                                <p>Permis de port d'arme : <strong><?php if(isset($_SESSION['adminweapon']) AND !empty($_SESSION['adminweapon'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
+                                                <p>Code de la route : <strong><?php if(isset($_SESSION['admindmv'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
+                                                <p>Permis de conduire : <strong><?php if(isset($_SESSION['adminddrive'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
+                                                <p>Permis poid lourd : <strong><?php if(isset($_SESSION['admindrive_truck'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
+                                                <p>Permis de port d'arme : <strong><?php if(isset($_SESSION['adminweapon'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
                                                 <?php if($a['lastest_panel_connection'] != NULL){ ?>
                                                 <p>Dernière connexion au panel : <strong><?= $a['lastest_panel_connection'] ?></strong></p>
                                                 <?php }else{ ?>

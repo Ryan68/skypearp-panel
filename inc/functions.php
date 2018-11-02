@@ -143,36 +143,21 @@ function fileExists($path){
     return (@fopen($path,"r")==true);
 }
 
-function newsearch() {
-    unset($_SESSION['searchidentifier']);
-    unset($_SESSION['searchlastname']);
-    unset($_SESSION['searchfirstname']);
-    unset($_SESSION['searchjob']);
-    unset($_SESSION['searchdob']);
-    unset($_SESSION['searchsex']);
-    unset($_SESSION['searchheight']);
-    unset($_SESSION['searchdmv']);
-    unset($_SESSION['searchdrive']);
-    unset($_SESSION['searchdrive_truck']);
-    unset($_SESSION['searchweapon']);
-    unset($_SESSION['status']);
-}
-
 function activation($license) {
 
     $reqlicense = bdd()->prepare("SELECT * FROM creditkey WHERE `key` = ?");
     $reqlicense->execute(array($license));
     $licensexist = $reqlicense->fetch();
     if(!empty($licensexist['amount'])){
-        $montantactuel = $_SESSION['money'];
+        $montantactuel = $_SESSION['bank'];
         $montantajouter = $licensexist['amount'];
         $total = $montantactuel + $montantajouter;
-        $withdraw = bdd()->prepare("UPDATE users SET `money` = ? WHERE `identifier` = ?");
+        $withdraw = bdd()->prepare("UPDATE users SET `bank` = ? WHERE `identifier` = ?");
         $withdraw->execute(array($total, $_SESSION['identifier']));
         $_SESSION['montantlicense'] = $licensexist['amount'];
         $_SESSION['ancienmontant'] = $montantactuel;
         $_SESSION['nouveaumontant'] = $total;
-        $_SESSION['money'] = $total;
+        $_SESSION['bank'] = $total;
         $_SESSION['status'] = 'success';
     }else{
         $_SESSION['status'] = 'error';
@@ -300,32 +285,32 @@ function GetLicense($identifier){
         $userexist2 = $requser2->rowCount();
         if($userexist2 == 1) {
             $userinfo2 = $requser2->fetch();
-            $_SESSION['admindmv'] = $userinfo2['type'];
-        }else{ $_SESSION['admindmv'] = ''; }
+            $_SESSION['admindmv'] = true;
+        }
 
         $requser3 = bdd()->prepare("SELECT * FROM user_licenses WHERE `type` = ? AND `owner` = ?");
         $requser3->execute(array("drive", $identifier));
         $userexist3 = $requser3->rowCount();
         if($userexist3 == 1) {
             $userinfo3 = $requser3->fetch();
-            $_SESSION['admindrive'] = $userinfo3['type'];
-        }else{ $_SESSION['admindrive'] = ''; }
+            $_SESSION['admindrive'] = true;
+        }
 
         $requser4 = bdd()->prepare("SELECT * FROM user_licenses WHERE `type` = ? AND `owner` = ?");
         $requser4->execute(array("drive_truck", $identifier));
         $userexist4 = $requser4->rowCount();
         if($userexist4 == 1) {
             $userinfo4 = $requser4->fetch();
-            $_SESSION['admindrive_truck'] = $userinfo4['type'];
-        }else{ $_SESSION['admindrive_truck'] = ''; }
+            $_SESSION['admindrive_truck'] = true;
+        }
 
         $requser5 = bdd()->prepare("SELECT * FROM user_licenses WHERE `type` = ? AND `owner` = ?");
         $requser5->execute(array("weapon", $identifier));
         $userexist5 = $requser5->rowCount();
         if($userexist5 == 1) {
             $userinfo5 = $requser5->fetch();
-            $_SESSION['adminweapon'] = $userinfo5['type'];
-        }else{ $_SESSION['adminweapon'] = ''; }
+            $_SESSION['adminweapon'] = true;
+        }
 }
 
 function GetLicenseWeapon($identifier){

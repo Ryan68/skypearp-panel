@@ -178,7 +178,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                     <?php if($_SESSION['logged']){ ?>
                                     <div class="col-lg-6">
                                         <form method="POST" action="editprofil.php">
-                                            <button type="submit" class="btn btn-default btn-sm btn-block"><i class="fa fa-user"></i> Edit profil</button>
+                                            <button type="submit" class="btn btn-default btn-sm btn-block"><i class="fa fa-user"></i> Editer profil</button>
                                         </form>
                                     </div>
                                     <?php } ?>

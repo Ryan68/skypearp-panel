@@ -108,13 +108,6 @@ if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
 
         <?php include('inc/topbar.php'); ?>
 
-        <?php include('inc/topbar.php'); ?>
-        <?php
-            function fileExists($path){
-                return (@fopen($path,"r")==true);
-            }
-        ?>
-
 		<!-- Start right content -->
         <div class="content-page">
 			<!-- ============================================================== -->
