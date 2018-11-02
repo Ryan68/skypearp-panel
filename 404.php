@@ -56,7 +56,7 @@
             <h1>404</h1>
             <h2>La page que vous recherchez n'est certainement pas celle-ci!</h2><br>
             <p class="text-lightblue-2">Vous feriez mieux de revenir en arrière</p><br>
-            <a class="btn btn-primary btn-sm" href="index.php"><i class="fa fa-angle-left"></i> Retour au Dashboard</a>
+            <a class="btn btn-primary btn-sm" href="index.php"><i class="fa fa-angle-left"></i> Retour</a>
         </div>
     </div>
     <!-- End of page -->

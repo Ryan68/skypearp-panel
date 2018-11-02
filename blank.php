@@ -6,6 +6,12 @@ if(!$_SESSION['logged']){
     exit;
 }
 
+$perm = $_SESSION['permission_level'];
+if($perm == 0){
+    header("Location: 404.php");
+    exit;
+}
+
 // if($_SESSION['job'] != 'ambulance'){
 //     header("Location: ".$_SERVER['HTTP_REFERER']);
 //     exit;

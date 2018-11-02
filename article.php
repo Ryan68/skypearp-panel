@@ -5,10 +5,10 @@ if(!$_SESSION['logged']){
     header("Location: login.php");
     exit;
 }
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_commentaires;charset=utf8','root','');
+
 if(isset($_GET['id']) AND !empty($_GET['id'])) {
    $get_id = htmlspecialchars($_GET['id']);
-   $article = $bdd->prepare('SELECT * FROM articles WHERE id = ?');
+   $article = bdd()->prepare('SELECT * FROM articles WHERE id = ?');
    $article->execute(array($get_id));
    if($article->rowCount() == 1) {
       $article = $article->fetch();
@@ -31,13 +31,14 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
              $c_msg = "Erreur: Tous les champs doivent être complétés";
           }
        }
-       $commentaires = $bdd->prepare('SELECT * FROM commentaires WHERE id_article = ? ORDER BY id DESC');
+       $commentaires = bdd()->prepare('SELECT * FROM commentaires WHERE id_article = ? ORDER BY id DESC');
        $commentaires->execute(array($get_id));
    } else {
       die('Cet article n\'existe pas !');
    }
 } else {
-   die('Erreur');
+    header("Location: 404.php");
+    exit;
 }
 
 ?>

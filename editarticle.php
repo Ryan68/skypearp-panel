@@ -8,7 +8,7 @@ if(!$_SESSION['logged']){
 
 $perm = $_SESSION['permission_level'];
 if($perm == 0){
-    header("Location: index.php");
+    header("Location: 404.php");
     exit;
 }
 
