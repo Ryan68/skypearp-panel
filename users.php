@@ -77,7 +77,7 @@ if($perm <= 0){
                     <!-- USERS START HERE-->
                     <?php if(isset($_GET['msg']) AND !empty($_GET['msg'])){ echo '<center><h3><strong><font color="#27ae60">'.urldecode($_GET['msg']).'</font></strong></h3></center>' ; } ?>
                     <?php $users = bdd()->query('SELECT * FROM users ORDER BY permission_level DESC'); while($a = $users->fetch()) { ?>
-                        <?php $ID = $a['id']; ?>
+                        <?php $ID = $a['id']; $firstname = $a['firstname']; $lastname = $a['lastname']; ?>
                         <center>
                             <div class="container-fluid">
                                 <div class="widget">
@@ -133,19 +133,42 @@ if($perm <= 0){
                                                 <?php }else{ ?>
                                                     <p>Dernière connexion au panel : <strong>Jamais</strong></p>
                                                 <?php } ?>
-                                                <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyCash<?= $ID ?>"><img src="assets/img/argent/cash.png"> Modifier <img src="assets/img/argent/cash.png"></button></p>
-                                                <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyBank<?= $ID ?>"><img src="assets/img/argent/bank.png"> Modifier <img src="assets/img/argent/bank.png"></button></p>
-                                                <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyBlack<?= $ID ?>"><img src="assets/img/argent/black_money.png"> Modifier <img src="assets/img/argent/black_money.png"></button></p>
-                                                <form action="supprimeruser.php?id=<?= $a['id'] ?>">
-                                                    <p><button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#moneyCash<?= $ID ?>" data-whatever="@getbootstrap">Supprimer utilisateur</button></p>
-                                                </form>
-                                                <!-- <p><a href="supprimeruser.php?id=<?= $a['id'] ?>"><b>Supprimer l'utilisateur</b></a></p> -->
+                                                <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyCash<?= $ID ?>"><img src="assets/img/argent/cash.png"> Modifier <img src="assets/img/argent/cash.png"></button>
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyBank<?= $ID ?>"><img src="assets/img/argent/bank.png"> Modifier <img src="assets/img/argent/bank.png"></button>
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#moneyBlack<?= $ID ?>"><img src="assets/img/argent/black_money.png"> Modifier <img src="assets/img/argent/black_money.png"></button></p>
+                                                <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#delete<?= $ID ?>"><i class="glyphicon glyphicon-warning-sign"></i> Supprimer utilisateur <i class="glyphicon glyphicon-warning-sign"></i></button></p>
+                                                <!-- <p><a href="supprimeruser.php?id=<?= $ID ?>"><b>Supprimer l'utilisateur</b></a></p> -->
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                             <hr>
+                            <div class="modal fade" id="delete<?= $ID ?>" tabindex="-1" role="dialog" aria-labelledby="deleteLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteLabel">Supprimer <?php echo $firstname.' '.$lastname; ?> :</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="supprimeruser.php">
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Etes vous certain de vouloir supprimer cette utilisateur ?</label>
+                                            <input type="text" name="id" value="<?= $ID ?>" hidden />
+                                            <!-- <textarea class="form-control" id="message-text"></textarea> -->
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non pas du tout !</button>
+                                        <button type="submit" class="btn btn-primary" name="sendmoney">Oui j'en suis sûr !</button>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="modal fade" id="moneyCash<?= $ID ?>" tabindex="-1" role="dialog" aria-labelledby="moneyCashLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
