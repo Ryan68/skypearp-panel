@@ -141,7 +141,7 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 										<form method="POST" style="text-align: center;">
 											<button type="submit" name="newrct" class="btn btn-skypea">Réessayez</button>
 										</form>
-									<?php } ?>
+									<?php } unset($_SESSION['status']); ?>
 								</div>
 							</div>
 						</div>
