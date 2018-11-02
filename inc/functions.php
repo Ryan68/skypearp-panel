@@ -79,6 +79,9 @@ function search($firstname, $lastname)
             $_SESSION['searchsex'] = $userinfo['sex'];
             $_SESSION['searchheight'] = $userinfo['height'];
             $identifier = $userinfo['identifier'];
+            if(!empty($userinfo['avatar'])){
+                $_SESSION['searchavatar'] = $userinfo['avatar'];
+            }
 
             $data2 = bdd()->prepare("SELECT * FROM user_licenses WHERE `type` = ? AND `owner` = ?");
             $data2->execute(array("dmv", $identifier));
@@ -136,6 +139,10 @@ function userExist($firstname, $lastname){
     
 }
 
+function fileExists($path){
+    return (@fopen($path,"r")==true);
+}
+
 function newsearch() {
     unset($_SESSION['searchidentifier']);
     unset($_SESSION['searchlastname']);
@@ -176,7 +183,6 @@ function newPass($newpass) {
 
     $requser = bdd()->prepare("UPDATE users SET password = ? WHERE id = ?");
     $requser->execute(array($newpass, $_SESSION['id']));
-    //$userexist = $requser->rowCount();
     $_SESSION['msgsuccess'] = "<b>Votre mot de passe à été mis à jours !</b>";
 }
 
@@ -203,8 +209,6 @@ function avatar(){
                     }else{
                         $_SESSION['msgsuccess'] = "<b>Votre photo de profil à été mis à jours</b>";
                     }
-                    
-                    //header("Location: editprofil.php");
                 }else{
                     $_SESSION['msg'] = "<b>Erreur durant l'importation de votre photo de profil</b>";
                     return false;
@@ -265,6 +269,17 @@ function Connexion($firstname, $lastname, $password){
         } else {
             $_SESSION['logged'] = false;
         }
+    }
+}
+
+function GetID($firstname, $lastname){
+    $getid = bdd()->prepare('SELECT * FROM users WHERE firstname = ? AND lastname = ?');
+    $getid->execute(array($firstname, $lastname));
+    $getidexist = $getid->rowCount();
+    if($getidexist == 1) {
+        $idresult = $getid->fetch();
+        //$_SESSION['blackmoney'] = $blackmoneyinfo['money'];
+        return $idresult['id'];
     }
 }
 

@@ -7,18 +7,19 @@ if(!$_SESSION['logged']){
 }
 
 
-if(isset($_POST['submit'])){
+if(isset($_POST['submitmsg'])){
 
-    if(!empty($_POST['message'])){
+    if(!empty($_POST['submitcontent'])){
 
-        $username = htmlspecialchars($_SESSION['firstname'].' '.$_SESSION['lastname']);
-        $message = htmlspecialchars($_POST['message']);
-        $senderidentifier = htmlspecialchars($_SESSION['identifier']);
-        $insertmsg = bdd()->prepare('INSERT INTO chat (username, message, send_date, sender_identifier) VALUES (?, ?, Now(), ?)');
-        $insertmsg->execute(array($username, $message, $senderidentifier));
+        $firstname = htmlspecialchars($_SESSION['firstname']);
+        $lastname = htmlspecialchars($_SESSION['lastname']);
+        $content = htmlspecialchars($_POST['submitcontent']);
+        $senderid = $_SESSION['id'];
+        $insertmsg = bdd()->prepare('INSERT INTO wall (firstname, lastname, content, send_date, id_profil) VALUES (?, ?, ?, Now(), ?)');
+        $insertmsg->execute(array($firstname, $lastname, $content, $senderid));
 
     }else{
-        echo 'Veuillez insérez un message !';
+        die('Veuillez insérez un message !');
     }
 
 }
@@ -27,11 +28,12 @@ if(isset($_POST['profilmsgsubmit'])){
 
     if(!empty($_POST['profilmessage'])){
 
-        $username = htmlspecialchars($_SESSION['firstname'].' '.$_SESSION['lastname']);
+        $firstname = htmlspecialchars($_SESSION['firstname']);
+        $lastname = htmlspecialchars($_SESSION['lastname']);
         $message = htmlspecialchars($_POST['profilmessage']);
-        $senderidentifier = htmlspecialchars($_SESSION['identifier']);
-        $insertmsg = bdd()->prepare('INSERT INTO wall (username, content, send_date, id_profil) VALUES (?, ?, Now(), ?)');
-        $insertmsg->execute(array($username, $message, $_GET['id']));
+        //$senderidentifier = htmlspecialchars($_SESSION['identifier']);
+        $insertmsg = bdd()->prepare('INSERT INTO wall (firstname, lastname, content, send_date, id_profil) VALUES (?, ?, ?, Now(), ?)');
+        $insertmsg->execute(array($firstname, $lastname, $message, $_GET['id']));
 
     }else{
         echo 'Veuillez insérez un message !';
@@ -119,63 +121,6 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
     <link rel="apple-touch-icon" sizes="144x144" href="assets/img/apple-touch-icon-144x144.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="assets/img/apple-touch-icon-152x152.png" />
 </head>
-
-<style>
-
-    .card {
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        transition: 0.3s;
-        border-radius: 5px; /* 5px rounded corners */
-        width: 13%;
-    }
-
-    .card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
-
-    .test {
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        transition: 0.3s;
-        border-radius: 5px; /* 5px rounded corners */
-        width: 15%;
-    }
-
-    .test:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
-
-    .container {
-        padding: 2px 16px;
-    }
-
-    .label {
-        color: white;
-        padding: 8px;
-    }
-
-    .success {background-color: #4CAF50;} /* Green */
-    .info {background-color: #2196F3;} /* Blue */
-    .warning {background-color: #ff9800;} /* Orange */
-    .danger {background-color: #f44336;} /* Red */
-    .other {background-color: #e7e7e7; color: black;} /* Gray */
-
-
-
-
-    .alert {
-        padding: 20px;
-        background-color: #f44336;
-        color: white;
-        opacity: 1;
-        transition: opacity 0.6s;
-        margin-bottom: 15px;
-    }
-
-    .alert.success {background-color: #4CAF50;}
-    .alert.info {background-color: #2196F3;}
-    .alert.warning {background-color: #ff9800;}
-
-</style>
 
 <body class="fixed-left">
 
@@ -266,14 +211,14 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                         <div class="the-timeline">
                                             <h2>Ajouter un message sur votre mur</h2>
                                             <form role="form" class="post-to-timeline" method="POST">
-                                                <textarea class="form-control" style="height: 70px;" name="message" placeholder="Votre message..."></textarea>
+                                                <textarea class="form-control" style="height: 70px;" name="submitcontent" placeholder="Votre message..."></textarea>
                                                 <div class="row">
                                                 <div class="col-sm-6">
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-camera"></i></a>
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-video-camera"></i></a>
                                                     <a class="btn btn-sm btn-default"><i class="fa fa-map-marker"></i></a>
                                                 </div>
-                                                <div class="col-sm-6 text-right"><button type="submit" name="submit" class="btn btn-primary">Envoyez</button></div>
+                                                <div class="col-sm-6 text-right"><button type="submit" name="submitmsg" class="btn btn-primary">Envoyez</button></div>
                                                 </div>
                                             </form>
                                             <br><br>
@@ -313,6 +258,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                         }else{
                                                             $mois = 'Err';
                                                         }
+                                                        $IDSender = GetID($msg['firstname'], $msg['lastname']);
                                                         ?>
                                                     <li>
                                                         <div class="the-date">
@@ -321,7 +267,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                             <span><?= $jour ?></span>
                                                             <small><?= $mois ?></small>
                                                         </div>
-                                                        <h4><?= $msg['username'] ?> : </h4>
+                                                        <h4><a href="profil.php?id=<?= $IDSender ?>"><?php echo $msg['firstname'].' '.$msg['lastname']; ?></a> : </h4>
                                                         <p>
                                                         <?= $msg['content'] ?>
                                                         </p>
@@ -495,14 +441,15 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                     }
                                                     
                                                 }
+                                                $ID = $result['id'];
                                                 ?>
 
                                             <li class="media">
-                                                <a class="pull-left" href="#fakelink">
+                                                <a class="pull-left" href="assets/img/avatar/<?= $avatar ?>">
                                                 <img class="media-object" src="assets/img/avatar/<?= $avatar ?>" alt="Avatar">
                                                 </a>
                                                 <div class="media-body">
-                                                <h4 class="media-heading"><a href="#fakelink"><?= $msg['username'] ?></a> <small><?= $msg['send_date'] ?></small></h4>
+                                                <h4 class="media-heading"><a href="profil.php?id=<?= $ID ?>"><?= $msg['username'] ?></a> <small><?= $msg['send_date'] ?></small></h4>
                                                 <p><?= $msg['message'] ?></p>
                                                 </div>
                                             </li>
@@ -618,6 +565,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                         }else{
                                                             $mois     =  'Err';
                                                         }
+                                                        $IDSender = GetID($msg['firstname'], $msg['lastname']);
                                                     ?>
                                                     <li>
                                                         <div class="the-date">
@@ -626,7 +574,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                             <span><?= $jour ?></span>
                                                             <small><?= $mois ?></small>
                                                         </div>
-                                                        <h4><?= $msg['username'] ?> : </h4>
+                                                        <h4><a href="profil.php?id=<?= $IDSender ?>"><?php echo $msg['firstname'].' '.$msg['lastname']; ?></a> : </h4>
                                                         <p>
                                                         <?= $msg['content'] ?>
                                                         </p>
@@ -800,14 +748,15 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                     }
                                                     
                                                 }
+                                                $ID = $result['id'];
                                                 ?>
 
                                             <li class="media">
-                                                <a class="pull-left" href="#fakelink">
+                                                <a class="pull-left" href="assets/img/avatar/<?= $avatar ?>">
                                                 <img class="media-object" src="assets/img/avatar/<?= $avatar ?>" alt="Avatar">
                                                 </a>
                                                 <div class="media-body">
-                                                <h4 class="media-heading"><a href="#fakelink"><?= $msg['username'] ?></a> <small><?= $msg['send_date'] ?></small></h4>
+                                                <h4 class="media-heading"><a href="profil.php?id=<?= $ID ?>"><?= $msg['username'] ?></a> <small><?= $msg['send_date'] ?></small></h4>
                                                 <p><?= $msg['message'] ?></p>
                                                 </div>
                                             </li>

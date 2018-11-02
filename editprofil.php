@@ -8,10 +8,12 @@ if(!$_SESSION['logged']){
 }
 
 if(isset($_POST['sendavatar']) AND isset($_POST['newpass']) AND !empty($_POST['newpass'])){
-    newPass($_POST['newpass']);
+    $newpass = htmlspecialchars($_POST['newpass']);
+    newPass($newpass);
     avatar();
 }elseif(!isset($_POST['sendavatar']) AND isset($_POST['newpass'])) {
-    newPass($_POST['newpass']);
+    $newpass = htmlspecialchars($_POST['newpass']);
+    newPass($newpass);
 }elseif(isset($_POST['sendavatar']) AND empty($_POST['newpass'])) {
     avatar();
 }
@@ -24,6 +26,7 @@ if(isset($_POST['sendavatar']) AND isset($_POST['newpass']) AND !empty($_POST['n
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Dashboard | Editer mon profil</title>
@@ -108,108 +111,122 @@ if(isset($_POST['sendavatar']) AND isset($_POST['newpass']) AND !empty($_POST['n
 
 <body class="fixed-left">
 
-<?php include('inc/topbar.php'); ?>
+    <?php include('inc/topbar.php'); ?>
 
-<!-- Start right content -->
-<div class="content-page">
-    <!-- ============================================================== -->
-    <!-- Start Content here -->
-    <!-- ============================================================== -->
-    <div class="content">
+    <!-- Start right content -->
+    <div class="content-page">
+        <!-- ============================================================== -->
+        <!-- Start Content here -->
+        <!-- ============================================================== -->
+        <div class="content">
 
-        <div class="row">
-            <!-- CONTENT START HERE-->
-            <center>
-                <div class="container-fluid">
-                    <div class="test">
-                        <img src="assets/img/users/avatar/<?php if(isset($_SESSION['avatar'])){ echo $_SESSION['avatar']; }else{ echo 'img_avatar.png'; } ?>" alt="Avatar" style="width:100%">
-                        <div class="container-fluid">
-                            <form method="post" enctype="multipart/form-data">
-                                <p><div><label>Nouveau mot de passe* :</label></div></p>
-                                <p><input type="password" name="newpass" placeholder="Nouveau mot de passe*" style="text-align:center;" autofocus /></p>
-                                <p><label>Avatar :</label>&nbsp;&nbsp;<input type="file" class="btn btn-warning" name="avatar" /></p>
-                                <p><input type="submit" name="sendavatar" class="btn btn-success" value="Envoyez" /></p>
-                            </form>
-                            <p style="text-align: left;">*Facultatif</p>
-                            <font color="red"><?php if(isset($_SESSION['msg'])){ echo $_SESSION['msg']; } ?></font>
-                            <font color="green"><?php if(isset($_SESSION['msgsuccess'])){ echo $_SESSION['msgsuccess']; } ?></font>
+            <div class="row">
+                <!-- CONTENT START HERE-->
+                <center>
+                    <div class="container-fluid">
+                        <div class="test">
+                            <img src="assets/img/users/avatar/<?php if(isset($_SESSION['avatar'])){ echo $_SESSION['avatar']; }else{ echo 'img_avatar.png'; } ?>"
+                                alt="Avatar" style="width:100%">
+                            <div class="container-fluid">
+                                <form method="post" enctype="multipart/form-data">
+                                    <p>
+                                        <div><label>Nouveau mot de passe* :</label></div>
+                                    </p>
+                                    <p><input type="password" name="newpass" placeholder="Nouveau mot de passe*" style="text-align:center;"
+                                            autofocus /></p>
+                                    <p><label>Avatar :</label>&nbsp;&nbsp;<input type="file" class="btn btn-warning"
+                                            name="avatar" /></p>
+                                    <p><input type="submit" name="sendavatar" class="btn btn-success" value="Envoyez" /></p>
+                                </form>
+                                <p style="text-align: left;">*Facultatif</p>
+                                <font color="red">
+                                    <?php if(isset($_SESSION['msg'])){ echo $_SESSION['msg']; } ?>
+                                </font>
+                                <font color="green">
+                                    <?php if(isset($_SESSION['msgsuccess'])){ echo $_SESSION['msgsuccess']; } ?>
+                                </font>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </center>
-            <!-- CONTENT END HERE-->
-        </div>
+                </center>
+                <!-- CONTENT END HERE-->
+            </div>
 
-        <?php include('inc/footer.php'); ?>
+            <?php include('inc/footer.php'); ?>
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End content here -->
+        <!-- ============================================================== -->
 
     </div>
-    <!-- ============================================================== -->
-    <!-- End content here -->
-    <!-- ============================================================== -->
+    <!-- End right content -->
 
-</div>
-<!-- End right content -->
+    </div>
+    <div id="contextMenu" class="dropdown clearfix">
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
+            <li><a tabindex="-1" href="javascript:;" data-priority="high"><i class="fa fa-circle-o text-red-1"></i>
+                    High Priority</a></li>
+            <li><a tabindex="-1" href="javascript:;" data-priority="medium"><i class="fa fa-circle-o text-orange-3"></i>
+                    Medium Priority</a></li>
+            <li><a tabindex="-1" href="javascript:;" data-priority="low"><i class="fa fa-circle-o text-yellow-1"></i>
+                    Low Priority</a></li>
+            <li><a tabindex="-1" href="javascript:;" data-priority="none"><i class="fa fa-circle-o text-lightblue-1"></i>
+                    None</a></li>
+        </ul>
+    </div>
+    <!-- End of page -->
+    <!-- the overlay modal element -->
+    <div class="md-overlay"></div>
+    <!-- End of eoverlay modal -->
+    <script>
+        var resizefunc = [];
+    </script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="assets/libs/jquery/jquery-1.11.1.min.js"></script>
+    <script src="assets/libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/libs/jqueryui/jquery-ui-1.10.4.custom.min.js"></script>
+    <script src="assets/libs/jquery-ui-touch/jquery.ui.touch-punch.min.js"></script>
+    <script src="assets/libs/jquery-detectmobile/detect.js"></script>
+    <script src="assets/libs/jquery-animate-numbers/jquery.animateNumbers.js"></script>
+    <script src="assets/libs/ios7-switch/ios7.switch.js"></script>
+    <script src="assets/libs/fastclick/fastclick.js"></script>
+    <script src="assets/libs/jquery-blockui/jquery.blockUI.js"></script>
+    <script src="assets/libs/bootstrap-bootbox/bootbox.min.js"></script>
+    <script src="assets/libs/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="assets/libs/jquery-sparkline/jquery-sparkline.js"></script>
+    <script src="assets/libs/nifty-modal/js/classie.js"></script>
+    <script src="assets/libs/nifty-modal/js/modalEffects.js"></script>
+    <script src="assets/libs/sortable/sortable.min.js"></script>
+    <script src="assets/libs/bootstrap-fileinput/bootstrap.file-input.js"></script>
+    <script src="assets/libs/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="assets/libs/bootstrap-select2/select2.min.js"></script>
+    <script src="assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="assets/libs/pace/pace.min.js"></script>
+    <script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="assets/libs/jquery-icheck/icheck.min.js"></script>
 
-</div>
-<div id="contextMenu" class="dropdown clearfix">
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
-        <li><a tabindex="-1" href="javascript:;" data-priority="high"><i class="fa fa-circle-o text-red-1"></i> High Priority</a></li>
-        <li><a tabindex="-1" href="javascript:;" data-priority="medium"><i class="fa fa-circle-o text-orange-3"></i> Medium Priority</a></li>
-        <li><a tabindex="-1" href="javascript:;" data-priority="low"><i class="fa fa-circle-o text-yellow-1"></i> Low Priority</a></li>
-        <li><a tabindex="-1" href="javascript:;" data-priority="none"><i class="fa fa-circle-o text-lightblue-1"></i> None</a></li>
-    </ul>
-</div>
-<!-- End of page -->
-<!-- the overlay modal element -->
-<div class="md-overlay"></div>
-<!-- End of eoverlay modal -->
-<script>
-    var resizefunc = [];
-</script>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="assets/libs/jquery/jquery-1.11.1.min.js"></script>
-<script src="assets/libs/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/libs/jqueryui/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="assets/libs/jquery-ui-touch/jquery.ui.touch-punch.min.js"></script>
-<script src="assets/libs/jquery-detectmobile/detect.js"></script>
-<script src="assets/libs/jquery-animate-numbers/jquery.animateNumbers.js"></script>
-<script src="assets/libs/ios7-switch/ios7.switch.js"></script>
-<script src="assets/libs/fastclick/fastclick.js"></script>
-<script src="assets/libs/jquery-blockui/jquery.blockUI.js"></script>
-<script src="assets/libs/bootstrap-bootbox/bootbox.min.js"></script>
-<script src="assets/libs/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="assets/libs/jquery-sparkline/jquery-sparkline.js"></script>
-<script src="assets/libs/nifty-modal/js/classie.js"></script>
-<script src="assets/libs/nifty-modal/js/modalEffects.js"></script>
-<script src="assets/libs/sortable/sortable.min.js"></script>
-<script src="assets/libs/bootstrap-fileinput/bootstrap.file-input.js"></script>
-<script src="assets/libs/bootstrap-select/bootstrap-select.min.js"></script>
-<script src="assets/libs/bootstrap-select2/select2.min.js"></script>
-<script src="assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
-<script src="assets/libs/pace/pace.min.js"></script>
-<script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script src="assets/libs/jquery-icheck/icheck.min.js"></script>
+    <!-- Demo Specific JS Libraries -->
+    <script src="assets/libs/prettify/prettify.js"></script>
 
-<!-- Demo Specific JS Libraries -->
-<script src="assets/libs/prettify/prettify.js"></script>
-
-<script src="assets/js/init.js"></script>
-<!-- Page Specific JS Libraries -->
-<script src="assets/libs/d3/d3.v3.js"></script>
-<script src="assets/libs/rickshaw/rickshaw.min.js"></script>
-<script src="assets/libs/raphael/raphael-min.js"></script>
-<script src="assets/libs/morrischart/morris.min.js"></script>
-<script src="assets/libs/jquery-knob/jquery.knob.js"></script>
-<script src="assets/libs/jquery-jvectormap/js/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="assets/libs/jquery-jvectormap/js/jquery-jvectormap-us-aea-en.js"></script>
-<script src="assets/libs/jquery-clock/clock.js"></script>
-<script src="assets/libs/jquery-easypiechart/jquery.easypiechart.min.js"></script>
-<script src="assets/libs/jquery-weather/jquery.simpleWeather-2.6.min.js"></script>
-<script src="assets/libs/bootstrap-xeditable/js/bootstrap-editable.min.js"></script>
-<script src="assets/libs/bootstrap-calendar/js/bic_calendar.min.js"></script>
-<script src="assets/js/apps/calculator.js"></script>
-<script src="assets/js/apps/todo.js"></script>
-<script src="assets/js/apps/notes.js"></script>
-<script src="assets/js/pages/index.js"></script>
+    <script src="assets/js/init.js"></script>
+    <!-- Page Specific JS Libraries -->
+    <script src="assets/libs/d3/d3.v3.js"></script>
+    <script src="assets/libs/rickshaw/rickshaw.min.js"></script>
+    <script src="assets/libs/raphael/raphael-min.js"></script>
+    <script src="assets/libs/morrischart/morris.min.js"></script>
+    <script src="assets/libs/jquery-knob/jquery.knob.js"></script>
+    <script src="assets/libs/jquery-jvectormap/js/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="assets/libs/jquery-jvectormap/js/jquery-jvectormap-us-aea-en.js"></script>
+    <script src="assets/libs/jquery-clock/clock.js"></script>
+    <script src="assets/libs/jquery-easypiechart/jquery.easypiechart.min.js"></script>
+    <script src="assets/libs/jquery-weather/jquery.simpleWeather-2.6.min.js"></script>
+    <script src="assets/libs/bootstrap-xeditable/js/bootstrap-editable.min.js"></script>
+    <script src="assets/libs/bootstrap-calendar/js/bic_calendar.min.js"></script>
+    <script src="assets/js/apps/calculator.js"></script>
+    <script src="assets/js/apps/todo.js"></script>
+    <script src="assets/js/apps/notes.js"></script>
+    <script src="assets/js/pages/index.js"></script>
 </body>
+
 </html>

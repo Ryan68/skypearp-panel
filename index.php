@@ -224,12 +224,6 @@ if(!$_SESSION['logged']){
 
 				<div class="row">
                     <!-- CONTENT START HERE-->
-                    <?php
-			            function fileExists($path){
-			                return (@fopen($path,"r")==true);
-			            }
-			        ?>
-
                     <!-- ARTICLE START HERE-->
                     <?php $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_commentaires;charset=utf8','root',''); ?>
 		            <?php $articles = $bdd->query('SELECT * FROM articles ORDER BY date_time_publication DESC'); while($a = $articles->fetch()) { ?>
@@ -256,8 +250,6 @@ if(!$_SESSION['logged']){
 						</div>
 		            <?php } ?>
 		            <!-- ARTICLE END HERE-->
-
-
                     <!-- CONTENT END HERE-->
 				</div>
 

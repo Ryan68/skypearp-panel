@@ -64,11 +64,6 @@ if($perm == 0){
     <body class="fixed-left">
 
         <?php include('inc/topbar.php'); ?>
-        <?php
-            function fileExists($path){
-                return (@fopen($path,"r")==true);
-            }
-        ?>
 
 		<!-- Start right content -->
         <div class="content-page">
@@ -82,11 +77,12 @@ if($perm == 0){
                     <!-- USERS START HERE-->
                     <?php if(isset($_GET['msg']) AND !empty($_GET['msg'])){ echo '<center><h3><strong><font color="#27ae60">'.urldecode($_GET['msg']).'</font></strong></h3></center>' ; } ?>
                     <?php $users = bdd()->query('SELECT * FROM users ORDER BY permission_level DESC'); while($a = $users->fetch()) { ?>
+                        <?php $ID = $a['id']; ?>
                         <center>
                             <div class="container-fluid">
                                 <div class="widget">
                                     <div class="widget-header">
-                                        <h2><strong><?= $a['firstname'], ' ', $a['lastname'] ?></a></strong></h2>
+                                        <h2><strong><a href="profil.php?id=<?= $ID ?>"><?= $a['firstname'], ' ', $a['lastname'] ?></a></strong></h2>
                                     </div>
                                     <div class="widget-content padding">
                                         <form class="form-vertical" role="form">

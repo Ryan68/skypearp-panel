@@ -6,12 +6,35 @@ if(!$_SESSION['logged']){
     exit;
 }
 
+if($_SESSION['job'] == 'police'){
+	if($_SESSION['job_grade'] <= '0'){
+		header("Location: ".$_SERVER['HTTP_REFERER']);
+   		exit;
+	}
+}else{
+	header("Location: ".$_SERVER['HTTP_REFERER']);
+   	exit;
+}
+
+
 if(isset($_POST['submit'])){
 	search($_POST['needsearchfirstname'], $_POST['needsearchlastname']);
 }
 
 if(isset($_POST['newsearch'])){
-	newsearch();
+	unset($_SESSION['searchidentifier']);
+    unset($_SESSION['searchlastname']);
+    unset($_SESSION['searchfirstname']);
+    unset($_SESSION['searchjob']);
+    unset($_SESSION['searchdob']);
+    unset($_SESSION['searchsex']);
+    unset($_SESSION['searchheight']);
+    unset($_SESSION['searchdmv']);
+    unset($_SESSION['searchdrive']);
+    unset($_SESSION['searchdrive_truck']);
+    unset($_SESSION['searchweapon']);
+	unset($_SESSION['status']);
+	unset($_SESSION['searchavatar']);
 }
 
 $identifier = isset($_SESSION['searchidentifier']) ? $_SESSION['searchidentifier'] : NULL;
@@ -124,6 +147,28 @@ $uid = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
                                     <?php if($job == 'unemployed'){ $job = 'Sans emploi'; } ?>
                                     <?php if(isset($_SESSION['status']) AND $_SESSION['status'] = 'success'){ ?>
                                     <div class="widget-content padding" style="text-align: center;">
+										<!-- AVATAR START HERE-->
+										<?php
+                                            if(isset($_SESSION['searchavatar'])){
+                                                $imgpath = "assets/img/users/avatar/".$_SESSION['searchavatar'];
+                                                if(fileExists($imgpath))
+                                                    { echo '<a href="'.$imgpath.'" target="_blank"><img src="'.$imgpath.'" width="150" /></a><br /><br />';
+                                                }else{
+                                                    if($sex == 'h'){
+                                                        echo '<img src="assets/img/users/avatar/img_avatar.png" width="150" /><br /><br />';
+                                                    }elseif($sex == 'f'){
+                                                        echo '<img src="assets/img/users/avatar/img_avatar2.png" width="150" /><br /><br />';
+                                                    }
+                                                }
+                                            }else{
+                                                if($sex == 'h'){
+                                                    echo '<img src="assets/img/users/avatar/img_avatar.png" width="150" /><br /><br />';
+                                                }elseif($sex == 'f'){
+                                                    echo '<img src="assets/img/users/avatar/img_avatar2.png" width="150" /><br /><br />';
+                                                }
+                                            }
+                                        ?>
+                                        <!-- AVATAR END HERE-->
 										<p>Nom : <b><?= $lastname ?></b></p>
 										<p>Prénom : <b><?= $firstname ?></b></p>
 										<p>Sexe : <b><?php if($sex == 'h'){ echo 'Homme'; }elseif($sex == 'f'){ echo 'Femme'; }else{ echo 'Inconnu'; } ?></b></p>
