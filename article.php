@@ -21,14 +21,17 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
              $pseudo = htmlspecialchars($_POST['pseudo']);
              $commentaire = htmlspecialchars($_POST['commentaire']);
              if(strlen($pseudo) < 25) {
-                $ins = $bdd->prepare('INSERT INTO commentaires (pseudo, commentaire, date_publication, id_article) VALUES (?,?, Now(),?)');
+                $ins = bdd()->prepare('INSERT INTO commentaires (pseudo, commentaire, date_publication, id_article) VALUES (?,?, Now(),?)');
                 $ins->execute(array($pseudo,$commentaire,$get_id));
-                $c_msg = "<span style='color:green'>Votre commentaire a bien été posté</span>";
+                $c_msg = "Votre commentaire a bien été posté";
+                $type = 'success';
              } else {
-                $c_msg = "Erreur: Le pseudo doit faire moins de 25 caractères";
+                $c_msg = "Le pseudo doit faire moins de 25 caractères";
+                $type = 'error';
              }
           } else {
-             $c_msg = "Erreur: Tous les champs doivent être complétés";
+             $c_msg = "Tous les champs doivent être complétés";
+             $type = 'error';
           }
        }
        $commentaires = bdd()->prepare('SELECT * FROM commentaires WHERE id_article = ? ORDER BY id DESC');
@@ -45,7 +48,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
         <title>SkypeaRP Panel | <?= $titre ?></title>   
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -65,6 +68,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
         <link href="assets/libs/sortable/sortable-theme-bootstrap.css" rel="stylesheet" />
         <link href="assets/libs/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
         <link href="assets/libs/jquery-icheck/skins/all.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <!-- Code Highlighter for Demo -->
         <link href="assets/libs/prettify/github.css" rel="stylesheet" />
         
@@ -105,6 +109,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
                     <!-- ARTICLE START HERE-->
 		            <?php if(!empty($get_id )) { ?>
 		            	<div class="container-fluid">
+                    <?php if(isset($c_msg) AND isset($type) AND !empty($c_msg) AND !empty($type)) { alert($c_msg, $type); } ?>
 				            <div class="widget">
 								<div class="widget-header">
 									<h2><strong><?= $titre ?></strong></h2>
@@ -118,22 +123,31 @@ if(isset($_GET['id']) AND !empty($_GET['id'])) {
 											<?= $contenu ?>
 										</div>
 										<div class="form-group">
-											Publié le <b><?= $articledate ?></b>
+											Publié le <b><?php $date = strtotime($articledate); echo date('d/m/y', $date).' à '. date('H:m', $date); ?></b>
 									</form>
                                     <hr>
                                         <h2>Ajouter un commentaires:</h2>
                                         <form method="POST">
-                                           <p><input type="text" name="pseudo" placeholder="" value="<?= $_SESSION['firstname'].' '.$_SESSION['lastname'] ?>" readonly/></p>
-                                           <p><textarea name="commentaire" placeholder="Votre commentaire..." required></textarea></p>
+                                          <div class="w3-row w3-section">
+                                            <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
+                                              <div class="w3-rest">
+                                                <input type="text" class="w3-input w3-border w3-round-large w3-light-grey" style="width:15%" name="pseudo" placeholder="" value="<?= $_SESSION['firstname'].' '.$_SESSION['lastname'] ?>" readonly/>
+                                              </div>
+                                          </div>
+                                          <div class="w3-row w3-section">
+                                            <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-pencil"></i></div>
+                                              <div class="w3-rest">
+                                                <input type="text" class="w3-input w3-border w3-round-large w3-light-grey" style="width:30%" name="commentaire" placeholder="Votre commentaire..."/>
+                                              </div>
+                                          </div>
                                            <p><input type="submit" class="btn btn-skypea" value="Poster mon commentaire" name="submit_commentaire" /></p>
                                         </form>
-                                        <?php if(isset($c_msg)) { echo $c_msg; } ?>
                                         <br />
                                         <?php while($c = $commentaires->fetch()) { ?>
                                             <hr>
                                            <p><b><?= $c['pseudo'] ?>:</b></p>
                                            <p><?= $c['commentaire'] ?></p>
-                                           <p>Posté le : <?= $c['date_publication'] ?></p>
+                                           <p>Posté le : <b><?php $date = strtotime($c['date_publication']); echo date('d/m/y', $date).' à '. date('H:m', $date); ?></b></p>
                                         <?php } ?>
 								</div>
 							</div>

@@ -11,7 +11,7 @@ if(!$_SESSION['logged']){
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
         <title>SkypeaRP Panel | Accueil</title>   
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -56,63 +56,6 @@ if(!$_SESSION['logged']){
         <link rel="apple-touch-icon" sizes="144x144" href="assets/img/apple-touch-icon-144x144.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="assets/img/apple-touch-icon-152x152.png" />
     </head>
-
-    <style>
-
-	    .card {
-	        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-	        transition: 0.3s;
-	        border-radius: 5px; /* 5px rounded corners */
-	        width: 13%;
-	    }
-
-	    .card:hover {
-	        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-	    }
-
-	    .test {
-	        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-	        transition: 0.3s;
-	        border-radius: 5px; /* 5px rounded corners */
-	        width: 15%;
-	    }
-
-	    .test:hover {
-	        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-	    }
-
-	    .container {
-	        padding: 2px 16px;
-	    }
-
-	    .label {
-	        color: white;
-	        padding: 8px;
-	    }
-
-	    .success {background-color: #4CAF50;} /* Green */
-	    .info {background-color: #2196F3;} /* Blue */
-	    .warning {background-color: #ff9800;} /* Orange */
-	    .danger {background-color: #f44336;} /* Red */
-	    .other {background-color: #e7e7e7; color: black;} /* Gray */
-
-
-
-
-	    .alert {
-	        padding: 20px;
-	        background-color: #f44336;
-	        color: white;
-	        opacity: 1;
-	        transition: opacity 0.6s;
-	        margin-bottom: 15px;
-	    }
-
-	    .alert.success {background-color: #4CAF50;}
-	    .alert.info {background-color: #2196F3;}
-	    .alert.warning {background-color: #ff9800;}
-
-	</style>
 
     <body class="fixed-left">
 
@@ -246,7 +189,7 @@ if(!$_SESSION['logged']){
 										</div>
 										<hr>
 										<div class="form-group">
-											Publié le <b><?= $a['date_time_publication'] ?></b>
+											Publié le <b><?php $date = strtotime($a['date_time_publication']); echo date('d/m/y', $date).' à '. date('H:m', $date); ?></b>
 										</div>
 									</form>
 								</div>

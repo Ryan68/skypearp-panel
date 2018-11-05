@@ -8,33 +8,6 @@
 
 session_start();
 
-function cnx(){
-    $dbHost = "localhost";        //Location Of Database usually its localhost
-    $dbUser = "root";            //Database User Name
-    $dbPass = '';            //Database Password
-    $dbDatabase = "essentialmode";    //Database Name
-
-    $mysqli = new mysqli($dbHost, $dbUser, $dbPass, $dbDatabase);
-    $mysqli->set_charset('utf8');
-    if ($mysqli->connect_error)
-    {
-        printf("Une erreur s'est produite: %s\n", $mysqli->connect_error);
-        exit();
-    }
-    return $mysqli;
-}
-
-function EncryptPass($string) // Encryption du mot de passe en SHA256 + ajout du SEL dans le pass
-{
-
-    $salt = "123mAKaeDSQPKzefZF5A84CSQ8ZEDfsq86";
-
-    $result = hash('sha256', $salt . $string);
-
-    return $result;
-
-}
-
 function bdd(){
     try
     {
@@ -50,26 +23,44 @@ function bdd(){
     return $bdd;
 }
 
+function alert($msg, $type = 'error'){
+        if($type == 'success'){
+        echo '<div class="w3-container">
+            <div class="w3-panel w3-green w3-display-container w3-animate-top">
+                <span onclick="this.parentElement.style.display=\'none\'"
+                class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Félicitation !</h3>
+                <p>'.$msg.'</p>
+            </div>
+        </div>';
+        }elseif($type == 'error'){ 
+        echo '<div class="w3-container">
+            <div class="w3-panel w3-red w3-display-container w3-animate-top">
+                <span onclick="this.parentElement.style.display=\'none\'"
+                class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Une erreur est survenu !</h3>
+                <p>'.$msg.'</p>
+            </div>
+        </div>';
+        }
+    }
+
+function EncryptPass($string) // Encryption du mot de passe en SHA256 + ajout du SEL dans le pass
+{
+
+    $salt = "123mAKaeDSQPKzefZF5A84CSQ8ZEDfsq86";
+
+    $result = hash('sha256', $salt . $string);
+
+    return $result;
+
+}
+
 function dd($variable){
     echo '<pre>';
     var_dump($variable);
     echo '</pre>';
     die();
-}
-
-function bddarticles(){
-    try
-    {
-        // On se connecte à MySQL
-        $bdd = new PDO('mysql:host=localhost;dbname=espace_commentaires;charset=UTF8', 'root', '');
-    }
-    catch(Exception $e)
-    {
-        // En cas d'erreur, on affiche un message et on arrête tout
-        die('Erreur : '.$e->getMessage());
-    }
-    // Si tout va bien, on peut continuer
-    return $bdd;
 }
 
 function search($firstname, $lastname)
@@ -165,6 +156,8 @@ function activation($license) {
         $_SESSION['ancienmontant'] = $montantactuel;
         $_SESSION['nouveaumontant'] = $total;
         $_SESSION['bank'] = $total;
+        $delkey = bdd()->prepare("DELETE FROM creditkey WHERE `key` = ?");
+        $delkey->execute(array($license));
         $_SESSION['status'] = 'success';
     }else{
         $_SESSION['status'] = 'error';
@@ -229,7 +222,6 @@ function Connexion($firstname, $lastname, $password){
             $identifier = $_SESSION['identifier'];
             $_SESSION['firstname'] = $userinfo['firstname'];
             $_SESSION['lastname'] = $userinfo['lastname'];
-            //$_SESSION['identifier'] = $userinfo['identifier'];
             $_SESSION['job'] = $userinfo['job'];
             $_SESSION['job_grade'] = $userinfo['job_grade'];
             $_SESSION['money'] = $userinfo['money'];
@@ -250,14 +242,6 @@ function Connexion($firstname, $lastname, $password){
             $userinfolastestconn = $reqlastestconn->fetch();
             $_SESSION['lastest_panel_connection'] = $userinfolastestconn;
             $_SESSION['logged'] = true;
-
-            // $blackmoney = bdd()->prepare('SELECT * FROM user_accounts WHERE identifier = ?');
-            // $blackmoney->execute(array($identifier));
-            // $blackmoneyexist = $blackmoney->rowCount();
-            // if($blackmoneyexist == 1) {
-            //     $blackmoneyinfo = $blackmoney->fetch();
-            //     $_SESSION['blackmoney'] = $blackmoneyinfo['money']; 
-            // }
         } else {
             $_SESSION['logged'] = false;
         }
@@ -272,6 +256,8 @@ function GetID($firstname, $lastname){
         $idresult = $getid->fetch();
         //$_SESSION['blackmoney'] = $blackmoneyinfo['money'];
         return $idresult['id'];
+    }else{
+        return NULL;
     }
 }
 
@@ -283,6 +269,8 @@ function GetBlackMoney($identifier){
         $blackmoneyinfo = $blackmoney->fetch();
         //$_SESSION['blackmoney'] = $blackmoneyinfo['money'];
         return $blackmoneyinfo['money'];
+    }else{
+        return NULL;
     }
 }
 
@@ -321,9 +309,9 @@ function GetLicense($identifier){
 }
 
 function GetLicenseWeapon($identifier){
-    $mysqli = cnx();
-    $result = mysqli_query($mysqli, "SELECT * FROM user_licenses WHERE owner = '" . $identifier ."'" . "AND type = 'weapon' LIMIT 1");
-    while($row = mysqli_fetch_array($result))
+    $result = bdd()->prepare("SELECT * FROM user_licenses WHERE owner = ? AND type = 'weapon' LIMIT 1");
+    $result->execute(array($identifier));
+    while($row = $result->fetch())
     {
         if(!empty($row)){
             return true;
@@ -333,9 +321,9 @@ function GetLicenseWeapon($identifier){
     }
 }
 function GetLicenseDmv($identifier){
-    $mysqli = cnx();
-    $result = mysqli_query($mysqli, "SELECT * FROM user_licenses WHERE owner = '" . $identifier ."'" . "AND type = 'dmv' LIMIT 1");
-    while($row = mysqli_fetch_array($result))
+    $result = bdd()->prepare("SELECT * FROM user_licenses WHERE owner = ? AND type = 'dmv' LIMIT 1");
+    $result->execute(array($identifier));
+    while($row = $result->fetch())
     {
         if(!empty($row)){
             return true;
@@ -344,31 +332,31 @@ function GetLicenseDmv($identifier){
         }
     }
 }
-function GetLicenseDrive($identifier){
-    $mysqli = cnx();
-    $result = mysqli_query($mysqli, "SELECT * FROM user_licenses WHERE owner = '" . $identifier ."'" . "AND type = 'drive' LIMIT 1");
-    while($row = mysqli_fetch_array($result))
-    {
-        if(!empty($row)){
-            return true;
-        }else{
-            return false;
+    function GetLicenseDrive($identifier){
+        $result = bdd()->prepare("SELECT * FROM user_licenses WHERE owner = ? AND type = 'drive' LIMIT 1");
+        $result->execute(array($identifier));
+        while($row = $result->fetch())
+        {
+            if(!empty($row)){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
-}
-function GetLicenseDriveTruck($identifier){
-    $mysqli = cnx();
-    $result = mysqli_query($mysqli, "SELECT * FROM user_licenses WHERE owner = '" . $identifier ."'" . "AND type = 'drive_truck' LIMIT 1");
-    while($row = mysqli_fetch_array($result))
-    {
-        if(!empty($row)){
-            return true;
-        }else{
-            return false;
+    function GetLicenseDriveTruck($identifier){
+        $result = bdd()->prepare("SELECT * FROM user_licenses WHERE owner = ? AND type = 'drive_truck' LIMIT 1");
+        $result->execute(array($identifier));
+        while($row = $result->fetch())
+        {
+            if(!empty($row)){
+                return true;
+            }else{
+                return false;
+            }
         }
-    }
 
-}
+    }
 
 function CountUsers(){
     $count = bdd()->query('SELECT * FROM users');

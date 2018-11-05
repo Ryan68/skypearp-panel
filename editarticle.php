@@ -11,55 +11,11 @@ if($perm == 0){
     header("Location: 404.php");
     exit;
 }
-
-$mode_edition = 0;
-if(isset($_GET['edit']) AND !empty($_GET['edit'])) {
-   $mode_edition = 1;
-   $edit_id = htmlspecialchars($_GET['edit']);
-   $edit_article = bddarticles()->prepare('SELECT * FROM articles WHERE id = ?');
-   $edit_article->execute(array($edit_id));
-   if($edit_article->rowCount() == 1) {
-      $edit_article = $edit_article->fetch();
-   } else {
-      die('Erreur : l\'article n\'existe pas...');
-   }
-}
-if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
-   if(!empty($_POST['article_titre']) AND !empty($_POST['article_contenu'])) {
-      
-      $article_titre = htmlspecialchars($_POST['article_titre']);
-      $article_contenu = htmlspecialchars($_POST['article_contenu']);
-      if($mode_edition == 0) {
-         // var_dump($_FILES);
-         // var_dump(exif_imagetype($_FILES['miniature']['tmp_name']));
-         $ins = bddarticles()->prepare('INSERT INTO articles (titre, contenu, date_time_publication, date_time_edition) VALUES (?, ?, NOW(), NOW())');
-         $ins->execute(array($article_titre, $article_contenu));
-         $lastid = bddarticles()->lastInsertId();
-         
-         if(isset($_FILES['miniature']) AND !empty($_FILES['miniature']['name'])) {
-            if(exif_imagetype($_FILES['miniature']['tmp_name']) == 2) {
-               $chemin = 'miniatures/'.$lastid.'.jpg';
-               move_uploaded_file($_FILES['miniature']['tmp_name'], $chemin);
-            } else {
-               $message = 'Votre image doit être au format jpg';
-            }
-         }
-         $message = 'Votre article a bien été posté';
-      } else {
-         $update = bddarticles()->prepare('UPDATE articles SET titre = ?, contenu = ?, date_time_edition = NOW() WHERE id = ?');
-         $update->execute(array($article_titre, $article_contenu, $edit_id));
-         header('Location: article.php?id='.$edit_id);
-         $message = 'Votre article a bien été mis à jour !';
-      }
-   } else {
-      $message = 'Veuillez remplir tous les champs';
-   }
-}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
         <title>SkypeaRP Panel | Editer un article</title>   
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -79,6 +35,7 @@ if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
         <link href="assets/libs/sortable/sortable-theme-bootstrap.css" rel="stylesheet" />
         <link href="assets/libs/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
         <link href="assets/libs/jquery-icheck/skins/all.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <!-- Code Highlighter for Demo -->
         <link href="assets/libs/prettify/github.css" rel="stylesheet" />
         
@@ -116,11 +73,16 @@ if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
             <div class="content">
 				<div class="row">
                     <!-- CONTENT START HERE-->
-
-
+                    <!-- ALERT START HERE-->
+                    <?php if(isset($_GET['msg']) AND isset($_GET['type']) AND !empty($_GET['msg']) AND !empty($_GET['type'])){
+                          $msg = htmlspecialchars(urldecode($_GET['msg']));
+                          $type = htmlspecialchars($_GET['type']);
+                          alert($msg, $type); 
+                          }?>
+                    <!-- ALERT END HERE-->
                     <!-- ARTICLE START HERE-->
                     <center>
-						<?php $articles = bddarticles()->query('SELECT * FROM articles ORDER BY date_time_publication DESC'); while($a = $articles->fetch()) { ?>
+						<?php $articles = bdd()->query('SELECT * FROM articles ORDER BY date_time_publication DESC'); while($a = $articles->fetch()) { ?>
 							<div class="container-fluid">
 							    <div class="widget">
 									<div class="widget-header">

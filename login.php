@@ -8,21 +8,24 @@ if(isset($_POST['connexion'])){
         $recaptcha = new \ReCaptcha\ReCaptcha($secret);
         $resp = $recaptcha->verify($_POST['g-recaptcha-response']);
         if ($resp->isSuccess()) {
-            Connexion($_POST['firstname'], $_POST['lastname'], $_POST['password']);
+        	$firstname = htmlspecialchars($_POST['firstname']);
+        	$lastname = htmlspecialchars($_POST['lastname']);
+        	$password = htmlspecialchars($_POST['password']);
+            Connexion($firstname, $lastname, $password);
 			if(isset($_SESSION['logged'])){
 				if($_SESSION['logged']){
-					//$_SESSION['success'] = true;
-					header('Location: index.php');
+					alert('Connexion réussi avec succès !', 'success');
+					header('Refresh:2; index.php');
 				}else{
-					//$_SESSION['success'] = false;
+					alert('Error !', 'error');
 				}
 			}
         } else {
-            $errors = $resp->getErrorCodes();
-            die('Captcha invalide');
+            //$errors = $resp->getErrorCodes();
+            alert('Captcha invalide', 'error');
         }
     }else{
-        die('Captcha non rempli');
+    	alert('Captcha non rempli', 'error');
     }
 }
 
@@ -32,7 +35,7 @@ if(isset($_POST['connexion'])){
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
         <title>SkypeaRP Panel | Connexion</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -43,19 +46,20 @@ if(isset($_POST['connexion'])){
         <!-- Base Css Files -->
         <link href="assets/libs/jqueryui/ui-lightness/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
         <link href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="assets/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
         <link href="assets/libs/fontello/css/fontello.css" rel="stylesheet" />
         <link href="assets/libs/animate-css/animate.min.css" rel="stylesheet" />
         <link href="assets/libs/nifty-modal/css/component.css" rel="stylesheet" />
-        <link href="assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" /> 
-        <link href="assets/libs/ios7-switch/ios7-switch.css" rel="stylesheet" /> 
+        <link href="assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" />
+        <link href="assets/libs/ios7-switch/ios7-switch.css" rel="stylesheet" />
         <link href="assets/libs/pace/pace.css" rel="stylesheet" />
         <link href="assets/libs/sortable/sortable-theme-bootstrap.css" rel="stylesheet" />
         <link href="assets/libs/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
         <link href="assets/libs/jquery-icheck/skins/all.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <!-- Code Highlighter for Demo -->
         <link href="assets/libs/prettify/github.css" rel="stylesheet" />
-        
+
                 <!-- Extra CSS Libraries Start -->
                 <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
                 <!-- Extra CSS Libraries End -->
@@ -79,18 +83,40 @@ if(isset($_POST['connexion'])){
         <link rel="apple-touch-icon" sizes="152x152" href="assets/img/apple-touch-icon-152x152.png" />
 		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
-    <body class="fixed-left login-page">		
+    <body class="fixed-left login-page">
 	<!-- Begin page -->
 	<div class="container">
 		<div class="full-content-center">
+			<?php if(isset($_SESSION['msg']) AND isset($_SESSION['msgtype'])){
+	          $msg = htmlspecialchars($_SESSION['msg']);
+	          $action->alert($msg, $_SESSION['msgtype']);
+	          } ?>
 			<!-- <p class="text-center"><a href="#"><img src="assets/img/login-logo.png" alt="Logo"></a></p> -->
 			<div class="login-wrap animated flipInX">
 				<div class="login-block">
 					<!-- <img src="images/users/user.png" class="img-circle not-logged-avatar" style="width:100%"> -->
 					<img src="images/users/user.png" style="width:100%">
 					<!-- <p><center><h2><font color='white'>Panel Civil</font></h2></center></p> -->
-					<form role="form" action="" method="POST">
-						<div class="form-group login-input">
+					<center><form role="form" action="" method="POST">
+						<div class="w3-row w3-section">
+                        	<div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
+                            <div class="w3-rest">
+                            	<input type="text" class="w3-input w3-border w3-round-large w3-light-grey" style="width:100%" name="firstname" placeholder="Prénom" required autofocus/>
+                            </div>
+                        </div>
+                        <div class="w3-row w3-section">
+                        	<div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
+                            <div class="w3-rest">
+                            	<input type="text" class="w3-input w3-border w3-round-large w3-light-grey" style="width:100%" name="lastname" placeholder="Nom" required/>
+                            </div>
+                        </div>
+                        <div class="w3-row w3-section">
+                        	<div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-key"></i></div>
+                            <div class="w3-rest">
+                            	<input type="password" class="w3-input w3-border w3-round-large w3-light-grey" style="width:100%" name="password" placeholder="Mot de passe" required/>
+                            </div>
+                        </div>
+						<!-- <div class="form-group login-input">
 						<i class="fa fa-user overlay"></i>
 						<input type="text" class="form-control text-input" name="firstname" placeholder="Prénom" required autofocus>
 						</div>
@@ -101,7 +127,7 @@ if(isset($_POST['connexion'])){
 						<div class="form-group login-input">
 						<i class="fa fa-key overlay"></i>
 						<input id="psw" type="password" class="form-control text-input" name="password" placeholder="Mot de passe" required>
-						</div>
+						</div> -->
 						<div class="g-recaptcha" data-sitekey="6LezXU0UAAAAADImLsERtn26IXe2e115FO2xE_iY"></div>
 						<div class="row">
 							<div class="col-sm-12" >
@@ -111,10 +137,10 @@ if(isset($_POST['connexion'])){
 								<a href="register" class="btn btn-default btn-block">Inscription</a>
 							</div> -->
 						</div>
-					</form>
+					</form></center>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 	<!-- the overlay modal element -->
@@ -123,33 +149,5 @@ if(isset($_POST['connexion'])){
 	<script>
 		var resizefunc = [];
 	</script>
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="assets/libs/jquery/jquery-1.11.1.min.js"></script>
-	<script src="assets/libs/bootstrap/js/bootstrap.min.js"></script>
-	<script src="assets/libs/jqueryui/jquery-ui-1.10.4.custom.min.js"></script>
-	<script src="assets/libs/jquery-ui-touch/jquery.ui.touch-punch.min.js"></script>
-	<script src="assets/libs/jquery-detectmobile/detect.js"></script>
-	<script src="assets/libs/jquery-animate-numbers/jquery.animateNumbers.js"></script>
-	<script src="assets/libs/ios7-switch/ios7.switch.js"></script>
-	<script src="assets/libs/fastclick/fastclick.js"></script>
-	<script src="assets/libs/jquery-blockui/jquery.blockUI.js"></script>
-	<script src="assets/libs/bootstrap-bootbox/bootbox.min.js"></script>
-	<script src="assets/libs/jquery-slimscroll/jquery.slimscroll.js"></script>
-	<script src="assets/libs/jquery-sparkline/jquery-sparkline.js"></script>
-	<script src="assets/libs/nifty-modal/js/classie.js"></script>
-	<script src="assets/libs/nifty-modal/js/modalEffects.js"></script>
-	<script src="assets/libs/sortable/sortable.min.js"></script>
-	<script src="assets/libs/bootstrap-fileinput/bootstrap.file-input.js"></script>
-	<script src="assets/libs/bootstrap-select/bootstrap-select.min.js"></script>
-	<script src="assets/libs/bootstrap-select2/select2.min.js"></script>
-	<script src="assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script> 
-	<script src="assets/libs/pace/pace.min.js"></script>
-	<script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<script src="assets/libs/jquery-icheck/icheck.min.js"></script>
-
-	<!-- Demo Specific JS Libraries -->
-	<script src="assets/libs/prettify/prettify.js"></script>
-
-	<script src="assets/js/init.js"></script>
 	</body>
 </html>

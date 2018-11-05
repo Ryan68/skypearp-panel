@@ -12,7 +12,7 @@ if($perm == 0){
     exit;
 }
 
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_commentaires;charset=utf8','root','');
+$bdd = new PDO('mysql:host=127.0.0.1;dbname=essentialmode;charset=utf8','root','');
 $mode_edition = 0;
 if(isset($_GET['edit']) AND !empty($_GET['edit'])) {
    $mode_edition = 1;
@@ -25,14 +25,13 @@ if(isset($_GET['edit']) AND !empty($_GET['edit'])) {
       die('Erreur : l\'article n\'existe pas...');
    }
 }
+
 if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
    if(!empty($_POST['article_titre']) AND !empty($_POST['article_contenu'])) {
       
       $article_titre = htmlspecialchars($_POST['article_titre']);
       $article_contenu = htmlspecialchars($_POST['article_contenu']);
       if($mode_edition == 0) {
-         // var_dump($_FILES);
-         // var_dump(exif_imagetype($_FILES['miniature']['tmp_name']));
          $ins = $bdd->prepare('INSERT INTO articles (titre, contenu, date_time_publication, date_time_edition) VALUES (?, ?, NOW(), NOW())');
          $ins->execute(array($article_titre, $article_contenu));
          $lastid = $bdd->lastInsertId();
@@ -43,24 +42,38 @@ if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
                move_uploaded_file($_FILES['miniature']['tmp_name'], $chemin);
             } else {
                $message = 'Votre image doit être au format jpg';
+               $type = 'error';
             }
          }
          $message = 'Votre article a bien été posté';
+         $type = 'success';
       } else {
          $update = $bdd->prepare('UPDATE articles SET titre = ?, contenu = ?, date_time_edition = NOW() WHERE id = ?');
          $update->execute(array($article_titre, $article_contenu, $edit_id));
+         if(isset($_FILES['miniature']) AND !empty($_FILES['miniature']['name'])) {
+            if(exif_imagetype($_FILES['miniature']['tmp_name']) == 2) {
+              $chemin = 'assets/img/miniatures/'.$edit_id.'.jpg';
+              unlink($chemin);
+              move_uploaded_file($_FILES['miniature']['tmp_name'], $chemin);
+            } else {
+               $message = 'Votre image doit être au format jpg';
+               $type = 'error';
+            }
+         }
          header('Location: article.php?id='.$edit_id);
          $message = 'Votre article a bien été mis à jour !';
+         $type = 'success';
       }
    } else {
       $message = 'Veuillez remplir tous les champs';
+      $type = 'error';
    }
 }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
         <title>SkypeaRP Panel | Ajouter/Editer un article</title>   
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -80,6 +93,7 @@ if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
         <link href="assets/libs/sortable/sortable-theme-bootstrap.css" rel="stylesheet" />
         <link href="assets/libs/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
         <link href="assets/libs/jquery-icheck/skins/all.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <!-- Code Highlighter for Demo -->
         <link href="assets/libs/prettify/github.css" rel="stylesheet" />
         
@@ -106,63 +120,6 @@ if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
         <link rel="apple-touch-icon" sizes="152x152" href="assets/img/apple-touch-icon-152x152.png" />
     </head>
 
-    <style>
-
-    .card {
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        transition: 0.3s;
-        border-radius: 5px; /* 5px rounded corners */
-        width: 13%;
-    }
-
-    .card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
-
-    .test {
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        transition: 0.3s;
-        border-radius: 5px; /* 5px rounded corners */
-        width: 15%;
-    }
-
-    .test:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
-
-    .container {
-        padding: 2px 16px;
-    }
-
-    .label {
-        color: white;
-        padding: 8px;
-    }
-
-    .success {background-color: #4CAF50;} /* Green */
-    .info {background-color: #2196F3;} /* Blue */
-    .warning {background-color: #ff9800;} /* Orange */
-    .danger {background-color: #f44336;} /* Red */
-    .other {background-color: #e7e7e7; color: black;} /* Gray */
-
-
-
-
-    .alert {
-        padding: 20px;
-        background-color: #f44336;
-        color: white;
-        opacity: 1;
-        transition: opacity 0.6s;
-        margin-bottom: 15px;
-    }
-
-    .alert.success {background-color: #4CAF50;}
-    .alert.info {background-color: #2196F3;}
-    .alert.warning {background-color: #ff9800;}
-
-</style>
-
     <body class="fixed-left">
 
         <?php include('inc/topbar.php'); ?>
@@ -176,6 +133,9 @@ if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
 				<div class="row">
                     <!-- CONTENT START HERE-->
                     <div class="container-fluid">
+                      <?php
+                          if(isset($message) AND isset($type) AND !empty($message) AND !empty($type)){ alert($message, $type); } //echo '<center><strong><font color="#27ae60">'.$message.'</font></strong></center>'; }
+                        ?>
                       <div class="widget">
                         <div class="widget-header">
                           <?php if(isset($_GET['edit']) AND !empty($_GET['edit'])) { ?>
@@ -185,9 +145,6 @@ if(isset($_POST['article_titre'], $_POST['article_contenu'])) {
                           <?php } ?>
                         </div>
                         <div class="widget-content padding">
-                          <?php
-                          if(isset($message) AND !empty($message)){ echo '<center><strong><font color="#27ae60">'.$message.'</font></strong></center>'; }
-                        ?>
                         <?php
                             if(isset($_GET['edit']) AND !empty($_GET['edit'])) { ?>
 

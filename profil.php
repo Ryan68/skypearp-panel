@@ -70,6 +70,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
         $profilid = $result['id'];
         $profilfirstname = $result['firstname'];
         $profillastname = $result['lastname'];
+        $profilphone = $result['phone_number'];
         if(!empty($result['avatar'])){
             $profilavatar = $result['avatar'];
         }       
@@ -149,7 +150,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
     <!-- ============================================================== -->
             <!-- Start Content here -->
             <!-- ============================================================== -->
-            <div class="profile-banner" style="background-image: url(images/avatar/profil_background_1.jpg);">
+            <div class="profile-banner" style="background-image: url(assets/img/users/avatar/profil_background_1.jpg);">
                 <div class="col-sm-3 avatar-container">
                     <img src="assets/img/users/avatar/<?php if(isset($_SESSION['avatar'])){ echo $_SESSION['avatar']; }else{ echo 'img_avatar.png'; } ?>" class="img-circle profile-avatar" alt="User avatar">
                 </div>
@@ -303,17 +304,17 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                 <!-- Tab about -->
                                 <div class="tab-pane animated fadeInRight" id="about">
                                     <div class="user-profile-content">
-                                        <h5><strong>ABOUT</strong> ME</h5>
+                                        <h5>A <strong>PROPOS</strong> DE MOI</h5>
                                         <p>
                                         Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
                                         </p>
                                         <hr />
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <h5><strong>CONTACT</strong> ME</h5>
+                                                <h5><strong>CONTACT</strong></h5>
                                                     <address>
-                                                        <strong>Phone</strong><br>
-                                                        <abbr title="Phone">+62 857 123 4567</abbr>
+                                                        <strong>Téléphone :</strong><br>
+                                                        <abbr title="Phone"><?= $_SESSION['phone'] ?></abbr>
                                                     </address>
                                                     <address>
                                                         <strong>Email</strong><br>
@@ -325,7 +326,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                     </address>
                                             </div>
                                             <div class="col-sm-6">
-                                                <h5><strong>MY</strong> SKILLS</h5>
+                                                <h5>MES <strong>COMPETENCES</strong></h5>
                                                 <p>UI Design</p>
                                                 <p>Clean and Modern Web Design</p>
                                                 <p>PHP and MySQL Programming</p>
@@ -493,7 +494,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
     <!-- ============================================================== -->
             <!-- Start Content here -->
             <!-- ============================================================== -->
-            <div class="profile-banner" style="background-image: url(images/avatar/profil_background_1.jpg);">
+            <div class="profile-banner" style="background-image: url(assets/img/users/avatar/profil_background_1.jpg);">
                 <div class="col-sm-3 avatar-container">
                     <img src="assets/img/users/avatar/<?php if(isset($profilavatar)){ echo $profilavatar; }else{ echo 'img_avatar.png'; } ?>" class="img-circle profile-avatar" alt="User avatar">
                 </div>
@@ -611,17 +612,17 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                 <!-- Tab about -->
                                 <div class="tab-pane animated fadeInRight" id="about">
                                     <div class="user-profile-content">
-                                        <h5><strong>ABOUT</strong> ME</h5>
+                                        <h5>A <strong>PROPOS</strong> DE MOI</h5>
                                         <p>
                                         Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
                                         </p>
                                         <hr />
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <h5><strong>CONTACT</strong> ME</h5>
+                                                <h5><strong>CONTACT</strong></h5>
                                                     <address>
-                                                        <strong>Phone</strong><br>
-                                                        <abbr title="Phone">+62 857 123 4567</abbr>
+                                                        <strong>Téléphone :</strong><br>
+                                                        <abbr title="Phone"><?= $profilphone ?></abbr>
                                                     </address>
                                                     <address>
                                                         <strong>Email</strong><br>
@@ -633,7 +634,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
                                                     </address>
                                             </div>
                                             <div class="col-sm-6">
-                                                <h5><strong>MY</strong> SKILLS</h5>
+                                                <h5>MES <strong>COMPETENCES</strong></h5>
                                                 <p>UI Design</p>
                                                 <p>Clean and Modern Web Design</p>
                                                 <p>PHP and MySQL Programming</p>

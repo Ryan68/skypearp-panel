@@ -16,7 +16,7 @@ if($perm <= 0){
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
         <title>SkypeaRP Panel | Gestion utilisateurs</title>   
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -129,7 +129,7 @@ if($perm <= 0){
                                                 <p>Permis poid lourd : <strong><?php if(isset($_SESSION['admindrive_truck'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
                                                 <p>Permis de port d'arme : <strong><?php if(isset($_SESSION['adminweapon'])){ echo '<font color="#2ecc71">Valide</font><br />'; }else{ echo '<font color="#c0392b">Invalide</font><br />'; } ?></strong></p>
                                                 <?php if($a['lastest_panel_connection'] != NULL){ ?>
-                                                    <p>Dernière connexion au panel : <strong><?= $a['lastest_panel_connection'] ?></strong></p>
+                                                    <p>Dernière connexion au panel : <strong><?php $date = strtotime($a['lastest_panel_connection']); echo date('d/m/y', $date).' à '. date('H:m:s', $date); ?></strong></p>
                                                 <?php }else{ ?>
                                                     <p>Dernière connexion au panel : <strong>Jamais</strong></p>
                                                 <?php } ?>
@@ -177,22 +177,23 @@ if($perm <= 0){
                                         <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body">
-                                        <form method="POST" action="argent.php">
-                                        <div class="form-group">
-                                            <label for="message-text" class="col-form-label">Nouveau montant* :</label>
-                                            <input type="text" name="ID" value="<?= $ID ?>" hidden />
-                                            <input type="text" name="type" value="cash" hidden />
-                                            <p><input id="max" type="number" name="montant" style="text-align: center;" value="0" max="999999999" /></p>
-                                            <p><small>*Attention, cela remplace la valeur, elle ne s'ajoute pas à la valeur précedente !</small></p>
-                                            <!-- <textarea class="form-control" id="message-text"></textarea> -->
+                                    <form method="POST" action="argent.php">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="message-text" class="col-form-label">Nouveau montant* :</label>
+                                                <input type="text" name="ID" value="<?= $ID ?>" hidden />
+                                                <input type="text" name="type" value="cash" hidden />
+                                                <p><input id="max" type="number" name="montant" style="text-align: center;" value="0" max="999999999" /></p>
+                                                <p><small>*Attention, cela remplace la valeur, elle ne s'ajoute pas à la valeur précedente !</small></p>
+                                                <!-- <textarea class="form-control" id="message-text"></textarea> -->
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                                        <button type="submit" class="btn btn-primary" name="sendmoney">Modifier</button>
-                                        </form>
-                                    </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                            <button type="submit" class="btn btn-primary" name="sendmoney">Modifier</button>
+
+                                        </div>
+                                    </form>
                                     </div>
                                 </div>
                             </div>
